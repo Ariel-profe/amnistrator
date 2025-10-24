@@ -26,6 +26,8 @@ export function SignInForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  const redirect = searchParams.get("redirect");
+
   const form = useForm<SignInValues>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -51,7 +53,7 @@ export function SignInForm() {
       setError(error.message || "Algo salió mal.");
     } else {
       toast.success("Sesión iniciada exitosamente!");
-      router.replace("/dashboard");
+      router.replace(redirect ?? "/dashboard");
     }
   }
 
@@ -140,7 +142,7 @@ export function SignInForm() {
               Iniciar sesión
             </LoadingButton>
 
-            <div className="flex w-full flex-col items-center justify-between gap-2">
+            {/* <div className="flex w-full flex-col items-center justify-between gap-2">
               <Button
                 type="button"
                 variant="outline"
@@ -151,7 +153,7 @@ export function SignInForm() {
                 <GoogleIcon width="0.98em" height="1em" />
                 Iniciar sesión con Google
               </Button>
-            </div>
+            </div> */}
           </form>
         </Form>
       </CardContent>

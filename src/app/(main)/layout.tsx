@@ -10,8 +10,6 @@ export default async function MainLayout({
   const session = await getServerSession();
   const user = session?.user;
 
-  if(user?.email !== "admin@amn.com.ar" && user?.email !== "operador@amn.com.ar" && user?.email !== "usuario@osar.com.ar") forbidden();
-
   return (
     <div className="flex min-h-screen flex-col">
       <AdminPanelLayout>

@@ -1,4 +1,4 @@
-import dataFlowLogo from "@/assets/data-flow.png";
+import aminstratorLogo from "@/assets/data-flow.png";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,15 +9,15 @@ export default function Home() {
       <div className="mx-auto max-w-3xl text-center">
         <div className="mb-8 flex items-center justify-center gap-4">
           <Image
-            src={dataFlowLogo}
-            alt="DataFlow logo"
+            src={aminstratorLogo}
+            alt="AMNistrator logo"
             width={80}
             height={80}
             className="border-muted rounded-md"
           />
         </div>
         <h1 className="text-3xl font-semibold sm:text-4xl">
-          DataFlow 
+          AMNistrator 
         </h1>
         <p className="text-muted-foreground mt-3 text-base text-balance sm:text-lg">
           Software de administración de datos para organizar y optimizar tu empresa, creado por{" "}
@@ -32,7 +32,7 @@ export default function Home() {
         </p>
         <div className="mx-auto mt-6 flex max-w-sm flex-col gap-3 sm:flex-row sm:justify-center">
           <Button asChild>
-            <Link href="/dashboard">Panel de administración</Link>
+            <Link href="/dashboard">Panel de control</Link>
           </Button>
           <Button asChild variant="outline">
             <Link href="/sign-in">Iniciar sesión</Link>

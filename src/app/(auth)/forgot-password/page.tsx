@@ -7,13 +7,12 @@ export const metadata: Metadata = {
 
 export default function ForgotPasswordPage() {
   return (
-    <main className="flex min-h-svh items-center justify-center px-4">
+    <main className="flex min-h-svh items-center justify-center px-3">
       <div className="space-y-6 w-full">
         <div className="space-y-2 text-center">
-          <h1 className="text-2xl font-semibold">Forgot password</h1>
+          <h1 className="text-2xl font-semibold">Recuperación de contraseña</h1>
           <p className="text-muted-foreground">
-            Enter your email address and we&apos;ll send you a link to reset
-            your password.
+            Ingresa tu email y te enviaremos un enlace para restablecer tu contraseña.
           </p>
         </div>
         <ForgotPasswordForm />

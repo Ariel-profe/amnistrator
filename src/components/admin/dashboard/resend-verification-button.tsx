@@ -1,7 +1,8 @@
 "use client";
 
-import { LoadingButton } from "@/components/ui/loading-button";
 import { useState } from "react";
+import { LoadingButton } from "@/components/ui/loading-button";
+import { authClient } from "@/lib/auth-client";
 
 interface ResendVerificationButtonProps {
   email: string;
@@ -15,8 +16,23 @@ export function ResendVerificationButton({
   const [error, setError] = useState<string | null>(null);
 
   async function resendVerificationEmail() {
-    // TODO: Resend verification email
-  }
+    setSuccess(null);
+    setError(null);
+    setIsLoading(true);
+
+    const {error} = await authClient.sendVerificationEmail({
+      email,
+      callbackURL: "/email-verified"
+    })
+
+    setIsLoading(false);
+
+    if(error){
+      setError(error.message || "Error al reenviar el correo de verificación. Intenta nuevamente.");
+    } else {
+      setSuccess("Correo de verificación reenviado exitosamente.");
+    }
+  };
 
   return (
     <div className="space-y-4">
@@ -36,7 +52,7 @@ export function ResendVerificationButton({
         className="w-full"
         loading={isLoading}
       >
-        Resend verification email
+        Reenviar correo de verificación
       </LoadingButton>
     </div>
   );

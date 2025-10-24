@@ -34,16 +34,16 @@ export function AdminSidebar() {
           asChild
         >
           <Link href="/admin/dashboard" className="flex items-center gap-2">
-            <PanelsTopLeft className="w-6 h-6 mr-1" />
+            <PanelsTopLeft className="w-6 h-6 mr-1 text-white" />
             <h1
               className={cn(
-                "font-bold text-lg whitespace-nowrap transition-[transform,opacity,display] ease-in-out duration-300",
+                "font-bold text-lg whitespace-nowrap transition-[transform,opacity,display] ease-in-out duration-300 text-white",
                 !getOpenState()
                   ? "-translate-x-96 opacity-0 hidden"
                   : "translate-x-0 opacity-100"
               )}
             >
-              DataFlow
+              <span className="text-rose-500">AMN</span>istrator
             </h1>
           </Link>
         </Button>

@@ -1,8 +1,14 @@
 
+import type { Metadata } from "next";
 import Link from "next/link";
+import { unauthorized } from "next/navigation";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, ContentLayout, EmailVerificationAlert, ProfileInformation } from "@/components";
 import { getServerSession } from "@/lib/get-server-session";
-import { unauthorized } from "next/navigation";
+
+export const metadata: Metadata = {
+  title: "Panel administrativo",
+  description: "Página del panel administrativo de usuario"
+};
 
 export default async function DashboardPage() {
 

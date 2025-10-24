@@ -1,22 +1,12 @@
 "use client";
 
-import { LoadingButton } from "@/components/ui/loading-button";
-import { PasswordInput } from "@/components/ui/password-input";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { passwordSchema } from "@/lib/validation";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, LoadingButton, PasswordInput, Card, CardContent } from "@/components";
+import { passwordSchema } from "@/lib/validation";
 
 const resetPasswordSchema = z.object({
   newPassword: passwordSchema,
@@ -55,11 +45,11 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
               name="newPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>New password</FormLabel>
+                  <FormLabel>Nueva contraseña</FormLabel>
                   <FormControl>
                     <PasswordInput
                       autoComplete="new-password"
-                      placeholder="Enter new password"
+                      placeholder="********"
                       {...field}
                     />
                   </FormControl>
@@ -80,7 +70,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
             )}
 
             <LoadingButton type="submit" className="w-full" loading={loading}>
-              Reset password
+              Restablecer contraseña
             </LoadingButton>
           </form>
         </Form>

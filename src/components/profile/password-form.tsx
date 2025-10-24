@@ -6,6 +6,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Card, CardContent, CardHeader, CardTitle, LoadingButton, PasswordInput} from "@/components";
 import { passwordSchema } from "@/lib/validation";
+import { authClient } from "@/lib/auth-client";
 
 const updatePasswordSchema = z.object({
   currentPassword: z
@@ -32,7 +33,21 @@ export function PasswordForm() {
     currentPassword,
     newPassword,
   }: UpdatePasswordValues) {
-    // TODO: Handle password update
+    setStatus(null);
+    setError(null);
+
+    const {error} = await authClient.changePassword({
+      currentPassword,
+      newPassword,
+      revokeOtherSessions: true,
+    });
+
+    if (error) {
+      setError(error.message || "Hubo un error al cambiar la contraseña");
+    } else {
+      setStatus("Contraseña cambiada correctamente");
+      form.reset();
+    }
   }
 
   const loading = form.formState.isSubmitting;

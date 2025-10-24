@@ -3,7 +3,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Email Verified",
+  title: "Email verificado",
+  description: "Página que confirma que el email del usuario ha sido verificado exitosamente."
 };
 
 export default function EmailVerifiedPage() {

@@ -39,6 +39,7 @@ export * from './admin/dashboard/content-layout';
 export * from './admin/dashboard/email-verification-alert';
 export * from './admin/dashboard/menu';
 export * from './admin/dashboard/profile-information';
+export * from './admin/dashboard/resend-verification-button';
 export * from './admin/dashboard/sheet-menu';
 export * from './admin/dashboard/sidebar-toggle';
 

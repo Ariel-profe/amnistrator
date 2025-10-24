@@ -1,23 +1,13 @@
 "use client";
 
-import { LoadingButton } from "@/components/ui/loading-button";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage, LoadingButton, Card, CardContent, Input} from "@/components";
 
 const forgotPasswordSchema = z.object({
-  email: z.email({ message: "Please enter a valid email" }),
+  email: z.email({ message: "Ingresa un email válido" }),
 });
 
 type ForgotPasswordValues = z.infer<typeof forgotPasswordSchema>;
@@ -72,7 +62,7 @@ export function ForgotPasswordForm() {
             )}
 
             <LoadingButton type="submit" className="w-full" loading={loading}>
-              Send reset link
+              Enviar enlace
             </LoadingButton>
           </form>
         </Form>

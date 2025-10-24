@@ -1,7 +1,13 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
 export default function UnauthorizedPage() {
+
+  const pathname = usePathname();
+
   return (
     <main className="flex min-h-svh items-center justify-center px-3">
       <div className="space-y-6">
@@ -11,7 +17,7 @@ export default function UnauthorizedPage() {
         </div>
         <div>
           <Button asChild>
-            <Link href="/sign-in">Iniciar sesión</Link>
+            <Link href={`/sign-in?redirect=${pathname}`}>Iniciar sesión</Link>
           </Button>
         </div>
       </div>

@@ -11,8 +11,8 @@ const outfit = Outfit({
 
 export const metadata: Metadata = {
   title: {
-    template: "%s | DataFlow",
-    absolute: "DataFlow by AMN",
+    template: "%s | AMNistrator",
+    default: "AMNistrator",
   },
   description:
     "Software de administración de datos para organizar y optimizar tu empresa, creado por AMN Consultora Informática",

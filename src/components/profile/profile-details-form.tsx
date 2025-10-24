@@ -6,7 +6,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { XIcon } from "lucide-react";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Card, CardContent, CardHeader, CardTitle, LoadingButton, Button, Input, UserAvatar} from "@/components";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Card, CardContent, CardHeader, CardTitle, LoadingButton, Button, Input, UserAvatar } from "@/components";
+import { User } from "@/lib/auth";
+import { authClient } from "@/lib/auth-client";
 
 const updateProfileSchema = z.object({
   name: z.string().trim().min(1, { message: "El nombre es obligatorio" }),
@@ -15,17 +17,15 @@ const updateProfileSchema = z.object({
 
 export type UpdateProfileValues = z.infer<typeof updateProfileSchema>;
 
-export function ProfileDetailsForm() {
+interface Props {
+  user: User;
+}
+
+export function ProfileDetailsForm({ user }: Props) {
   const [status, setStatus] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const router = useRouter();
-
-  // TODO: Render real user info
-  const user = {
-    name: "Juan Pérez",
-    image: undefined,
-  };
 
   const form = useForm<UpdateProfileValues>({
     resolver: zodResolver(updateProfileSchema),
@@ -36,7 +36,16 @@ export function ProfileDetailsForm() {
   });
 
   async function onSubmit({ name, image }: UpdateProfileValues) {
-    // TODO: Handle profile update
+    setStatus(null);
+    setError(null);
+
+    const { error } = await authClient.updateUser({ name, image });
+    if (error) {
+      setError(error.message || "Hubo un error al actualizar el perfil");
+    } else {
+      setStatus("Perfil actualizado");
+      router.refresh();
+    }
   }
 
   function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -109,7 +118,7 @@ export function ProfileDetailsForm() {
                   onClick={() => form.setValue("image", null)}
                   aria-label="Remove image"
                 >
-                  <XIcon className="size-4" />
+                  <XIcon className="size-4 bg-slate-500/50 rounded-full" />
                 </Button>
               </div>
             )}

@@ -21,7 +21,9 @@ export function SheetMenu() {
             asChild
           >
             <Link href="/dashboard" className="flex items-center gap-2">
-              <SheetTitle className="font-bold text-lg">DataFlow</SheetTitle>
+              <SheetTitle className="font-bold text-lg">
+                <span className="text-rose-500">AMN</span>istrator
+              </SheetTitle>
             </Link>
           </Button>
           <span className="text-xs text-center">by AMN Consultora Informática</span>
