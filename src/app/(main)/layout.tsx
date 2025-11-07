@@ -1,25 +1,22 @@
-import { Metadata } from "next";
-import AdminPanelLayout from "@/components/admin/dashboard/admin-panel-layout";
+import { ReactNode } from "react";
+import { redirect } from "next/navigation";
 import { getServerSession } from "@/lib/get-server-session";
-import { forbidden } from "next/navigation";
+import { Navbar, Footer } from "@/components";
 
-export default async function MainLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+export default async function MainLayout({ children }: { children: ReactNode }) {
 
   const session = await getServerSession();
   const user = session?.user;
 
+  if (!user) {
+    redirect('/sign-in');
+  };
+
   return (
-    <div className="flex min-h-screen flex-col">
-      <AdminPanelLayout>
-        {children}
-      </AdminPanelLayout>
-    </div>
+    <main>
+      <Navbar user={user} />
+      {children}
+      <Footer />
+    </main>
   );
 }
-
-export const metadata: Metadata = {
-  title: "Dashboard",
-  description: "Admin Dashboard",
-};

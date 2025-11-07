@@ -18,14 +18,14 @@ export const metadata: Metadata = {
     "Software de administración de datos para organizar y optimizar tu empresa, creado por AMN Consultora Informática",
 };
 
-export default function RootLayout({
+export default function RootLayoutOld({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${outfit.className} antialiased`}>
+      <body className={`${outfit.className} antialiased `}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

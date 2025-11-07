@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Card, CardContent, CardHeader, CardTitle, LoadingButton, PasswordInput} from "@/components";
-import { passwordSchema } from "@/lib/validation";
+import { passwordSchema } from "@/lib/password-validation";
 import { authClient } from "@/lib/auth-client";
 
 const updatePasswordSchema = z.object({

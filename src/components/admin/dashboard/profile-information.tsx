@@ -3,6 +3,7 @@
 import { Badge, Card, CardContent, CardDescription, CardHeader, CardTitle, UserAvatar } from "@/components";
 import { UserIcon, ShieldIcon, CalendarDaysIcon } from "lucide-react";
 import { format } from "date-fns";
+import { es } from 'date-fns/locale';
 import { User } from "@/lib/auth";
 
 interface Props {
@@ -28,10 +29,10 @@ export const ProfileInformation = ({ user }: Props) => {
             <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                     <UserIcon className="size-5" />
-                    Profile Information
+                    Información de perfil
                 </CardTitle>
                 <CardDescription>
-                    Your account details and current status
+                    Detalles de tu cuenta y estado actual
                 </CardDescription>
             </CardHeader>
             <CardContent>
@@ -59,10 +60,10 @@ export const ProfileInformation = ({ user }: Props) => {
                         <div className="space-y-2">
                             <div className="text-muted-foreground flex items-center gap-2 text-sm">
                                 <CalendarDaysIcon className="size-4" />
-                                Member Since
+                                Miembro desde
                             </div>
                             <p className="font-medium">
-                                {format(user.createdAt, "MMMM d, yyyy")}
+                                {format(user.createdAt, "d 'de' MMMM 'de' yyyy", { locale: es })}
                             </p>
                         </div>
                     </div>

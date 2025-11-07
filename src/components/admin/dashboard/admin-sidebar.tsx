@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { PanelsTopLeft } from "lucide-react";
+import { Command } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button, SidebarToggle, Menu } from "@/components";
@@ -33,21 +33,22 @@ export function AdminSidebar() {
           variant="link"
           asChild
         >
-          <Link href="/admin/dashboard" className="flex items-center gap-2">
-            <PanelsTopLeft className="w-6 h-6 mr-1 text-white" />
+          <Link href="/admin" className="flex items-center gap-2">
+            <div className="bg-slate-300 p-1 rounded-md flex justify-center items-center">
+              <Command className="w-8 h-8 text-primary" />
+            </div>
             <h1
               className={cn(
-                "font-bold text-lg whitespace-nowrap transition-[transform,opacity,display] ease-in-out duration-300 text-white",
+                "font-bold text-xl whitespace-nowrap transition-[transform,opacity,display] ease-in-out duration-300 text-white",
                 !getOpenState()
                   ? "-translate-x-96 opacity-0 hidden"
                   : "translate-x-0 opacity-100"
               )}
             >
-              <span className="text-rose-500">AMN</span>istrator
+              <span className="text-primary">AMN</span>istrator
             </h1>
           </Link>
         </Button>
-         <span className="text-xs text-center">by AMN Consultora Informática</span>
         <Menu isOpen={getOpenState()} />
       </div>
     </aside>

@@ -22,7 +22,7 @@ export function SheetMenu() {
           >
             <Link href="/dashboard" className="flex items-center gap-2">
               <SheetTitle className="font-bold text-lg">
-                <span className="text-rose-500">AMN</span>istrator
+                <span className="text-primary">AMN</span>istrator
               </SheetTitle>
             </Link>
           </Button>

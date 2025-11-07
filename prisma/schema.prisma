@@ -21,18 +21,23 @@ enum Role {
 }
 
 model User {
-  id            String    @id
+  id            String      @id
   name          String
   email         String
-  emailVerified Boolean   @default(false)
+  emailVerified Boolean     @default(false)
   image         String?
-  role          Role      @default(user)
-  loginCount    Int       @default(0)
-  status        Boolean   @default(true)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @default(now()) @updatedAt
+  role          Role        @default(user)
+  loginCount    Int         @default(0)
+  status        Boolean     @default(true)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @default(now()) @updatedAt
   sessions      Session[]
   accounts      Account[]
+  Service       Service[]
+  Reviews       Reviews[]
+  Company       Company?    @relation(fields: [companyId], references: [id])
+  companyId     String?
+  Equipment     Equipment[]
 
   @@unique([email])
   @@map("user")
@@ -81,4 +86,124 @@ model Verification {
   updatedAt  DateTime @default(now()) @updatedAt
 
   @@map("verification")
+}
+
+model Company {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  slug      String   @unique
+  email     String   @unique
+  phone     String
+  address   String
+  cuit      String   @unique
+  status    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  //Relations
+  users     User[]
+  Equipment Equipment[]
+
+  @@index([name])
+  @@map("company")
+}
+
+model Office {
+  id        String     @id @default(uuid())
+  name      String     @unique
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @default(now()) @updatedAt
+  status    Boolean    @default(true)
+
+  // Relations
+  equipment Equipment[]
+
+  @@index([name])
+  @@map("office")
+}
+
+model Category {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  slug      String   @unique
+  status    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  // Relations
+  equipment Equipment[]
+
+  @@index([name, slug])
+  @@map("category")
+}
+
+model Equipment {
+  id          String   @id @default(uuid())
+  tag         Int      @unique
+  name        String   @unique
+  slug        String   @unique
+  location    String
+  status      String
+  isActive    Boolean  @default(true)
+  os          String
+  processor   String
+  ram         String
+  motherboard String
+  videoCard   String
+  storage     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
+
+  // Relations
+  category   Category  @relation(fields: [categoryId], references: [id])
+  categoryId String
+  office     Office    @relation(fields: [officeId], references: [id])
+  officeId   String
+  services   Service[]
+  reviews    Reviews[]
+  company    Company?   @relation(fields: [companyId], references: [id])
+  companyId  String?
+  user       User?     @relation(fields: [userId], references: [id])
+  userId     String?
+
+  @@index([name, tag, location])
+  @@map("equipment")
+}
+
+model Service {
+  id          Int      @id @default(autoincrement())
+  description String
+  date        String
+  status      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
+
+  // Relations
+  equipmentId String?
+  Equipment   Equipment? @relation(fields: [equipmentId], references: [id])
+  user        User       @relation(fields: [userId], references: [id])
+  userId      String
+
+  @@index([date])
+  @@map("service")
+}
+
+model Reviews {
+  id          Int      @id @default(autoincrement())
+  description String
+  date        String
+  boxNumber   Int?
+  priority    String
+  status      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
+
+  // Relations
+  equipmentId String?
+  Equipment   Equipment? @relation(fields: [equipmentId], references: [id])
+  user        User       @relation(fields: [userId], references: [id])
+  userId      String
+
+  @@index([date, priority])
+  @@map("reviews")
 }

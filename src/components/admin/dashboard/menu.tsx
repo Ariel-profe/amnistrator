@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Ellipsis, LogOut } from "lucide-react";
-
-import { Button, ScrollArea, Tooltip, TooltipTrigger, TooltipContent, TooltipProvider, CollapseMenuButton } from "@/components";
-import { cn } from "@/lib/utils";
-import { getMenuList } from "@/lib/sidebar-menu-list";
-import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
+
+import { Button, ScrollArea, Tooltip, TooltipTrigger, TooltipContent, TooltipProvider, CollapseMenuButton, CreateButton } from "@/components";
+import { cn } from "@/lib/utils";
+import { getCommonMenuList } from "@/lib/sidebar-menu-list";
+import { authClient } from "@/lib/auth-client";
+import { IoAddOutline } from "react-icons/io5";
 
 interface MenuProps {
   isOpen: boolean | undefined;
@@ -16,7 +17,7 @@ interface MenuProps {
 
 export function Menu({ isOpen }: MenuProps) {
   const pathname = usePathname();
-  const menuList = getMenuList(pathname);
+  const menuList = getCommonMenuList(pathname);
 
   const onLogout = async () => {
     const { error } = await authClient.signOut();
@@ -30,8 +31,8 @@ export function Menu({ isOpen }: MenuProps) {
   };
 
   return (
-    <ScrollArea className="[&>div>div[style]]:!block">
-      <nav className="mt-8 h-full w-full">
+    <ScrollArea className="[&>div>div[style]]:!block overflow-hidden border-r">
+      <nav className="mt-2 h-full w-full">
         <ul className="flex flex-col min-h-[calc(100vh-48px-36px-16px-32px)] lg:min-h-[calc(100vh-32px-40px-32px)] items-start space-y-1 px-2">
           {menuList.map(({ groupLabel, menus }, index) => (
             <li className={cn("w-full", groupLabel ? "pt-5" : "")} key={index}>
@@ -56,41 +57,51 @@ export function Menu({ isOpen }: MenuProps) {
                 <p className="pb-2"></p>
               )}
               {menus.map(
-                ({ href, label, icon: Icon, active, submenus }, index) =>
+                ({ href, label, icon: Icon, active, submenus, createHref }, index) =>
                   !submenus || submenus.length === 0 ? (
                     <div className="w-full" key={index}>
                       <TooltipProvider disableHoverableContent>
                         <Tooltip delayDuration={100}>
                           <TooltipTrigger asChild>
-                            <Button
-                              variant={
-                                (active === undefined &&
-                                  pathname === href) ||
-                                  active
-                                  ? "default"
-                                  : "ghost"
-                              }
-                              className="w-full justify-start h-10 mb-1"
-                              asChild
-                            >
-                              <Link href={href}>
-                                <span
-                                  className={cn(isOpen === false ? "" : "mr-4")}
-                                >
-                                  <Icon size={18} />
-                                </span>
-                                <p
-                                  className={cn(
-                                    "max-w-[200px] truncate",
-                                    isOpen === false
-                                      ? "-translate-x-96 opacity-0"
-                                      : "translate-x-0 opacity-100"
-                                  )}
-                                >
-                                  {label}
-                                </p>
-                              </Link>
-                            </Button>
+                            <div className="w-full flex justify-center items-center relative">
+
+                              <Button
+                                variant={
+                                  (active === undefined &&
+                                    pathname === href) ||
+                                    active
+                                    ? "outline"
+                                    : "ghost"
+                                }
+                                className="w-full justify-start h-10 mb-1"
+                                asChild
+                              >
+                                <Link href={href}>
+                                  <span
+                                    className={cn(isOpen === false ? "" : "mr-1")}
+                                  >
+                                    <Icon size={18} />
+                                  </span>
+                                  <p
+                                    className={cn(
+                                      "max-w-[200px] truncate",
+                                      isOpen === false
+                                        ? "-translate-x-96 opacity-0"
+                                        : "translate-x-0 opacity-100"
+                                    )}
+                                  >
+                                    {label}
+                                  </p>
+                                </Link>
+                              </Button>
+                              {createHref && (
+                                <Button variant="ghost" className="ml-auto p-0 w-8 h-8 absolute right-1" asChild>
+                                  <Link href={createHref}>
+                                    <IoAddOutline />
+                                  </Link>
+                                </Button>
+                              )}
+                            </div>
                           </TooltipTrigger>
                           {isOpen === false && (
                             <TooltipContent side="right">
@@ -125,7 +136,7 @@ export function Menu({ isOpen }: MenuProps) {
                   <Button
                     onClick={onLogout}
                     variant="outline"
-                    className="w-full justify-center h-10 mt-5 text-destructive"
+                    className="w-full justify-center h-10 text-destructive"
                   >
                     <span className={cn(isOpen === false ? "" : "mr-4")}>
                       <LogOut size={18} />
@@ -141,7 +152,7 @@ export function Menu({ isOpen }: MenuProps) {
                   </Button>
                 </TooltipTrigger>
                 {isOpen === false && (
-                  <TooltipContent side="right">Sign out</TooltipContent>
+                  <TooltipContent side="right">Salir</TooltipContent>
                 )}
               </Tooltip>
             </TooltipProvider>

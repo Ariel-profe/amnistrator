@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, LoadingButton, PasswordInput, Card, CardContent } from "@/components";
-import { passwordSchema } from "@/lib/validation";
+import { passwordSchema } from "@/lib/password-validation";
 
 const resetPasswordSchema = z.object({
   newPassword: passwordSchema,

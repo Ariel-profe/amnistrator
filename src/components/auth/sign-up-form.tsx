@@ -6,13 +6,12 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { passwordSchema } from "@/lib/validation";
+import { passwordSchema } from "@/lib/password-validation";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input, LoadingButton, PasswordInput } from "@/components";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
 
-const signUpSchema = z
-  .object({
+const signUpSchema = z.object({
     name: z.string().min(1, { message: "El nombre es obligatorio" }),
     email: z.email({ message: "Ingresa un email válido" }),
     password: passwordSchema,
@@ -27,7 +26,11 @@ const signUpSchema = z
 
 type SignUpValues = z.infer<typeof signUpSchema>;
 
+const strengthLabels = ["weak", "medium", "medium", "strong"];
+
 export function SignUpForm() {
+  
+  const [strength, setStrength] = useState("");
   const [error, setError] = useState<string | null>(null);
 
   const router = useRouter();
@@ -42,10 +45,75 @@ export function SignUpForm() {
     },
   });
 
+  const getStrength = (password: string) => {
+    if (password.length === 0) return "";
+    
+    let score = 0;
+    
+    // Length scoring
+    if (password.length >= 8) score++;
+    if (password.length >= 12) score++;
+    if (password.length >= 16) score++;
+    
+    // Character variety scoring
+    if (/[a-z]/.test(password)) score++; // lowercase
+    if (/[A-Z]/.test(password)) score++; // uppercase
+    if (/\d/.test(password)) score++; // numbers
+    if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~`]/.test(password)) score++; // special chars
+    
+    // Pattern penalties
+    if (/(.)\1{2,}/.test(password)) score--; // repeated characters
+    if (/123|abc|qwe|asd|zxc/i.test(password)) score--; // common sequences
+    
+    // Determine strength based on score
+    if (score <= 2) return "weak";
+    if (score <= 4) return "medium";
+    return "strong";
+  };
+
+  const getStrengthColor = (strength: string) => {
+    switch (strength) {
+      case "weak":
+        return "bg-red-500";
+      case "medium":
+        return "bg-yellow-500";
+      case "strong":
+        return "bg-green-500";
+      default:
+        return "bg-gray-300";
+    }
+  };
+
+  const getStrengthWidth = (strength: string) => {
+    switch (strength) {
+      case "weak":
+        return "w-1/4";
+      case "medium":
+        return "w-2/4";
+      case "strong":
+        return "w-full";
+      default:
+        return "w-0";
+    }
+  };
+
+  const getStrengthText = (strength: string) => {
+    switch (strength) {
+      case "weak":
+        return "Débil";
+      case "medium":
+        return "Media";
+      case "strong":
+        return "Fuerte";
+      default:
+        return "";
+    }
+  };
+
   async function onSubmit({ email, password, name }: SignUpValues) {
     setError(null);
 
-    const {error} = await authClient.signUp.email({
+    const { error } = await authClient.signUp.email({
       email,
       password,
       name,
@@ -56,7 +124,7 @@ export function SignUpForm() {
       setError(error.message || "Algo salió mal.");
     } else {
       toast.success("Cuenta creada exitosamente!");
-      router.replace("/dashboard");
+      router.replace("/home");
     }
   }
 
@@ -64,6 +132,16 @@ export function SignUpForm() {
 
   return (
     <Card className="w-full max-w-md">
+      <div className="flex items-center justify-center gap-2">
+        <img
+          src="/amnistrator.png"
+          alt="Amnistrator logo"
+          className="h-12 w-auto"
+        />
+        <p className="">
+          <span className="text-primary">AMN</span>istrator
+        </p>
+      </div>
       <CardHeader>
         <CardTitle className="text-lg md:text-xl">Crea una cuenta</CardTitle>
         <CardDescription className="text-xs md:text-sm">
@@ -78,7 +156,7 @@ export function SignUpForm() {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Nombre</FormLabel>
+                  <FormLabel>Nombre y Apellido</FormLabel>
                   <FormControl>
                     <Input placeholder="Juan Pérez" {...field} />
                   </FormControl>
@@ -116,8 +194,30 @@ export function SignUpForm() {
                       autoComplete="new-password"
                       placeholder="********"
                       {...field}
+                      onChange={(e) => {
+                        field.onChange(e);
+                        setStrength(getStrength(e.target.value));
+                      }}
                     />
                   </FormControl>
+                  {field.value && (
+                    <div className="space-y-1">
+                      <div className="w-full bg-gray-200 rounded-full h-1">
+                        <div
+                          className={`h-1 rounded-full transition-all duration-300 ${getStrengthColor(
+                            strength
+                          )} ${getStrengthWidth(strength)}`}
+                        />
+                      </div>
+                      <p className={`text-sm font-medium ${
+                        strength === "weak" ? "text-red-600" :
+                        strength === "medium" ? "text-yellow-600" :
+                        strength === "strong" ? "text-green-600" : ""
+                      }`}>
+                        Seguridad: {getStrengthText(strength)}
+                      </p>
+                    </div>
+                  )}
                   <FormMessage />
                 </FormItem>
               )}

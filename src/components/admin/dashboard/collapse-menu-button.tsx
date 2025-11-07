@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { IconType } from "react-icons";
-import { IoAddOutline, IoChevronDown } from "react-icons/io5";
+import { IoChevronDown } from "react-icons/io5";
 import { DropdownMenuArrow } from "@radix-ui/react-dropdown-menu";
 
 import { Collapsible, CollapsibleContent, CollapsibleTrigger, DropdownMenu, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuSeparator, Tooltip, TooltipTrigger, TooltipContent, TooltipProvider, Button } from "@/components";
@@ -111,13 +111,6 @@ export function CollapseMenuButton({
                 </p>
               </Link>
             </Button>
-                
-            <Link href={`/admin/productos/${label}/new`}
-              className="absolute right-2 hover:text-tertiary hover:border border-tertiary transition-all p-1 rounded-sm"
-            >
-              <IoAddOutline />
-            </Link>
-
           </div>
         ))}
       </CollapsibleContent>

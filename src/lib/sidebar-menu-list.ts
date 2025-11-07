@@ -1,5 +1,5 @@
 import { IconType } from "react-icons";
-import { IoConstructOutline, IoGridOutline, IoNewspaperOutline, IoSettingsOutline, IoTicketOutline } from "react-icons/io5";
+import { IoAppsOutline, IoBagOutline, IoConstructOutline, IoDiceOutline, IoGridOutline, IoLayersOutline, IoNewspaperOutline, IoPeopleOutline, IoSettingsOutline, IoTicketOutline } from "react-icons/io5";
 
 type Submenu = {
   href: string;
@@ -11,6 +11,7 @@ type Menu = {
   href: string;
   label: string;
   active?: boolean;
+  createHref?: string;
   icon: IconType;
   submenus?: Submenu[];
 };
@@ -20,60 +21,85 @@ type Group = {
   menus: Menu[];
 };
 
-export function getMenuList(pathname: string): Group[] {
+export function getCommonMenuList(pathname: string): Group[] {
   return [
     {
-      groupLabel: "",
+      groupLabel: "Inicio",
       menus: [
         {
-          href: "/dashboard",
-          label: "Panel administrativo",
-          icon: IoGridOutline,
+          href: "/admin",
+          label: "Panel general",
+          icon: IoAppsOutline,
           submenus: []
         }
       ]
     },
     {
-      groupLabel: "Contenido",
-      menus: [       
+      groupLabel: "Gestión general",
+      menus: [
         {
-          href: "",
-          label: "Relevamientos",
-          icon: IoNewspaperOutline,
-          submenus: [
-            {
-              href: "/admin/productos/auriculares",
-              label: "1 - Primitivo"
-            },
-            {
-              href: "/admin/productos/caddys",
-              label: "2 - Buci"
-            },
-            {
-              href: "/admin/productos/caddys",
-              label: "3 - Moldes"
-            },
-          ]
+          href: "/admin/companies",
+          label: "Empresas",
+          icon: IoLayersOutline,
+          createHref: "/admin/companies/new"
         },
         {
-          href: "/admin/usuarios",
+          href: "/admin/payments",
+          label: "Abonos",
+          icon: IoTicketOutline
+        },
+        {
+          href: "/admin/servicios",
           label: "Servicios",
           icon: IoConstructOutline
         },
         {
-          href: "/admin/usuarios",
-          label: "Abonos",
-          icon: IoTicketOutline
-        },
+          href: "/admin/users",
+          label: "Usuarios",
+          icon: IoPeopleOutline
+        }
       ]
     },
     {
-      groupLabel: "Configuración",
+      groupLabel: "Relevamientos",
       menus: [
         {
-          href: "/account",
-          label: "Cuenta",
-          icon: IoSettingsOutline
+          href: "/admin/reports/primitivo",
+          label: "Primitivo",
+          icon: IoNewspaperOutline
+        },
+        {
+          href: "/admin/reports/buci",
+          label: "BUCI",
+          icon: IoNewspaperOutline
+        },
+        {
+          href: "/admin/reports/moldes",
+          label: "Moldes",
+          icon: IoNewspaperOutline
+        }
+      ]
+    },
+    {
+      groupLabel: "Equipos",
+      menus: [
+        {
+          href: "/admin/equipments",
+          label: "Equipos",
+          icon: IoDiceOutline,
+          createHref: "/admin/equipments/new"
+        },
+        {
+          href: "/admin/categories",
+          label: "Categorías",
+          icon: IoGridOutline,
+          createHref: "/admin/categories/new"
+        },
+        {
+          href: "/admin/offices",
+          label: "Oficinas",
+          icon: IoBagOutline,
+          createHref: "/admin/offices/new"
         }
       ]
     }

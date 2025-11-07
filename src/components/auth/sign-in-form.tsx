@@ -5,11 +5,10 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Checkbox, Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input, LoadingButton, PasswordInput} from "@/components";
-import { GoogleIcon } from "@/components/icons/GoogleIcon";
-import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Checkbox, Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input, LoadingButton, PasswordInput } from "@/components";
+import { authClient } from "@/lib/auth-client";
 
 const signInSchema = z.object({
   email: z.email({ message: "Ingresa un email válido" }),
@@ -49,20 +48,26 @@ export function SignInForm() {
 
     setLoading(false);
 
-    if(error) {
+    if (error) {
       setError(error.message || "Algo salió mal.");
     } else {
       toast.success("Sesión iniciada exitosamente!");
-      router.replace(redirect ?? "/dashboard");
+      router.replace(redirect ?? "/home");
     }
-  }
-
-  async function handleSocialSignIn(provider: "google" | "github") {
-    // TODO: Handle social sign in
-  }
+  };
 
   return (
     <Card className="w-full max-w-md">
+      <div className="flex items-center justify-center gap-2">
+        <img
+          src="/amnistrator.png"
+          alt="Amnistrator logo"
+          className="h-12 w-auto"
+        />
+        <p className="">
+          <span className="text-primary">AMN</span>istrator
+        </p>
+      </div>
       <CardHeader>
         <CardTitle className="text-lg md:text-xl">Iniciar sesión</CardTitle>
         <CardDescription className="text-xs md:text-sm">
@@ -134,26 +139,17 @@ export function SignInForm() {
 
             {error && (
               <div role="alert" className="text-sm text-red-600">
-                {error}
+                {error.includes("Invalid")
+                  ? "Email o contraseña incorrectos."
+                  : error.includes("not verified")
+                    ? "Email no verificado. Habla con el administrador."
+                    : error}
               </div>
             )}
 
             <LoadingButton type="submit" className="w-full" loading={loading}>
               Iniciar sesión
             </LoadingButton>
-
-            {/* <div className="flex w-full flex-col items-center justify-between gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                className="w-full gap-2"
-                disabled={loading}
-                onClick={() => handleSocialSignIn("google")}
-              >
-                <GoogleIcon width="0.98em" height="1em" />
-                Iniciar sesión con Google
-              </Button>
-            </div> */}
           </form>
         </Form>
       </CardContent>

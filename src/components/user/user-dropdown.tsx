@@ -59,8 +59,6 @@ function AdminItem() {
 }
 
 function SignOutItem() {
-  const router = useRouter();
-
   async function handleSignOut() {
     const { error } = await authClient.signOut();
     if (error) {
@@ -68,7 +66,7 @@ function SignOutItem() {
       return;
     } else {
       toast.success('Sesión cerrada');
-      window.location.href = '/sign-in';
+      window.location.href = '/';
     }
   };
 
