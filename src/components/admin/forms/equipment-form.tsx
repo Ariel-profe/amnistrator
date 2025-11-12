@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { Badge, Button, Calendar, Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input, LoadingButton, Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue, Textarea } from "@/components";
 
 import { createUpdateEquipment } from "@/actions/admin/create-update-equipment";
-import { validEquipmentLocations, validEquipmentOs, validEquipmentStatus, validEquipmentProcessors, validEquipmentRams, validEquipmentMotherboards, validEquipmentVideoCards, validEquipmentStorages } from "@/lib/equipment-form-validation";
+import { primitivoLocations, validEquipmentOs, validEquipmentStatus, validEquipmentRams, validEquipmentMotherboards, validEquipmentVideoCards, validEquipmentStorages, validEquipmentProcessors, buciLocations } from "@/lib/equipment-form-validation";
 import { IOffice } from "@/interfaces/office.interface";
 import z from "zod";
 import { Service, Equipment, Reviews, Company } from "@/generated/prisma";
@@ -43,7 +43,8 @@ const equipmentSchema = z.object({
     ram: z.string().min(1, { message: "La memoria RAM es obligatoria" }),
     motherboard: z.string().min(1, { message: "La placa madre es obligatoria" }),
     videoCard: z.string().min(1, { message: "La placa de video es obligatoria" }),
-    storage: z.string().min(1, { message: "El almacenamiento es obligatorio" }),
+    storage1: z.string().min(1, { message: "El almacenamiento es obligatorio" }),
+    storage2: z.string().optional(),
     services: z.array(z.object({
         id: z.number(),
         description: z.string(),
@@ -62,6 +63,8 @@ type EquipmentFormValues = z.infer<typeof equipmentSchema>;
 
 export const EquipmentForm = ({ equipment, offices, categories, services, reviews, companies }: Props) => {
 
+    const [officeSelected, setOfficeSelected] = useState<string | null>(null)
+
     const form = useForm<EquipmentFormValues>({
         resolver: zodResolver(equipmentSchema),
         defaultValues: {
@@ -78,7 +81,8 @@ export const EquipmentForm = ({ equipment, offices, categories, services, review
             ram: equipment.ram || "",
             motherboard: equipment.motherboard || "",
             videoCard: equipment.videoCard || "",
-            storage: equipment.storage || "",
+            storage1: equipment.storage1 || "",
+            storage2: equipment.storage2 || "",
             services: services
                 ? services.map(item => ({
                     id: item.id,
@@ -148,7 +152,10 @@ export const EquipmentForm = ({ equipment, offices, categories, services, review
         formData.append("ram", data.ram);
         formData.append("motherboard", data.motherboard);
         formData.append("videoCard", data.videoCard);
-        formData.append("storage", data.storage);
+        formData.append("storage1", data.storage1);
+        if (data.storage2) {
+            formData.append("storage2", data.storage2);
+        };
 
         data.services.forEach((serviceItem, index) => {
             formData.append(`services[${index}][description]`, serviceItem.description);
@@ -171,12 +178,12 @@ export const EquipmentForm = ({ equipment, offices, categories, services, review
 
         // If the product was created or updated successfully
         toast.success(message);
-        router.replace(`/admin/reports/${offices.find(o => o.id === data.officeId)?.name}`);
+        router.replace(`/admin/surveys/${offices.find(o => o.id === data.officeId)?.name}`);
     };
 
     const addServiceItem = () => {
         const items = getValues('services') || [];
-        const newId = items.length > 0 ? Math.max(...items.map((item: any) => Number(item.id) || 0)) + 1 : 1;
+        const newId = items.length > 0 ? Math.max(...items.map((item) => Number(item.id) || 0)) + 1 : 1;
 
         setValue('services', [
             ...items,
@@ -190,7 +197,7 @@ export const EquipmentForm = ({ equipment, offices, categories, services, review
 
     const addReviewItem = () => {
         const items = getValues('reviews') || [];
-        const newId = items.length > 0 ? Math.max(...items.map((item: any) => Number(item.id) || 0)) + 1 : 1;
+        const newId = items.length > 0 ? Math.max(...items.map((item) => Number(item.id) || 0)) + 1 : 1;
 
         setValue('reviews', [
             ...items,
@@ -212,11 +219,14 @@ export const EquipmentForm = ({ equipment, offices, categories, services, review
     watch('services');
     watch('reviews');
 
+    console.log({ officeSelected });
+
+
     return (
         <Form {...form}>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="flex justify-end gap-x-2">
-                    <Button 
+                    <Button
                         type="button"
                         onClick={() => router.back()}
                         variant="outline">
@@ -232,7 +242,8 @@ export const EquipmentForm = ({ equipment, offices, categories, services, review
                 </div>
 
                 <div className="grid mb-16 gap-3 mt-5">
-                    <div className="grid grid-cols-2 gap-x-4 w-full">
+
+                    <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-x-4 w-full">
                         <FormField
                             control={control}
                             name="tag"
@@ -243,175 +254,10 @@ export const EquipmentForm = ({ equipment, offices, categories, services, review
                                         <Input
                                             {...field}
                                             type="number"
+                                            value={field.value === 0 ? '' : field.value}
                                             onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : 0)}
                                         />
                                     </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        <FormField
-                            control={control}
-                            name="officeId"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Oficina</FormLabel>
-                                    {
-                                        offices.length === 0
-                                            ? (<p className="text-sm text-muted-foreground">No hay oficinas disponibles</p>)
-                                            : (
-                                                <FormControl>
-                                                    <Select onValueChange={field.onChange} value={field.value}>
-                                                        <SelectTrigger className="w-full">
-                                                            <SelectValue placeholder="Seleccionar oficina" />
-                                                        </SelectTrigger>
-                                                        <SelectContent>
-                                                            <SelectGroup>
-                                                                {
-                                                                    offices?.map((opt) => (
-                                                                        <SelectItem key={opt.id} value={opt.id || ""} className="capitalize">
-                                                                            {opt.name}
-                                                                        </SelectItem>
-                                                                    ))
-                                                                }
-                                                            </SelectGroup>
-                                                        </SelectContent>
-                                                    </Select>
-                                                </FormControl>
-                                            )
-                                    }
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-x-4 w-full">
-                        <FormField
-                            control={control}
-                            name="name"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Nombre</FormLabel>
-                                    <FormControl>
-                                        <Input {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        <FormField
-                            control={control}
-                            name="slug"
-                            rules={{ required: true }}
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Slug</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            {...field}
-                                            disabled
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-x-4 w-full">
-                        <FormField
-                            control={control}
-                            name="location"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Ubicación</FormLabel>
-                                    <FormControl>
-                                        <Select onValueChange={field.onChange} value={field.value}>
-                                            <SelectTrigger className="w-full">
-                                                <SelectValue placeholder="Seleccionar ubicación" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectGroup>
-                                                    {
-                                                        validEquipmentLocations.map((opt) => (
-                                                            <SelectItem key={opt} value={opt || ""}>
-                                                                {opt}
-                                                            </SelectItem>
-                                                        ))
-                                                    }
-                                                </SelectGroup>
-                                            </SelectContent>
-                                        </Select>
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        <FormField
-                            control={control}
-                            name="status"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Estado</FormLabel>
-                                    <FormControl>
-                                        <Select onValueChange={field.onChange} value={field.value}>
-                                            <SelectTrigger className="w-full">
-                                                <SelectValue placeholder="Seleccionar estado" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectGroup>
-                                                    {
-                                                        validEquipmentStatus.map((opt) => (
-                                                            <SelectItem key={opt} value={opt || ""}>
-                                                                {opt}
-                                                            </SelectItem>
-                                                        ))
-                                                    }
-                                                </SelectGroup>
-                                            </SelectContent>
-                                        </Select>
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-x-4 w-full">
-                        <FormField
-                            control={control}
-                            name="categoryId"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Categoría</FormLabel>
-                                    {
-                                        categories.length === 0
-                                            ? (<p className="text-sm text-muted-foreground">No hay categorías disponibles</p>)
-                                            : (
-                                                <FormControl>
-                                                    <Select onValueChange={field.onChange} value={field.value}>
-                                                        <SelectTrigger className="w-full">
-                                                            <SelectValue placeholder="Seleccionar categoría" />
-                                                        </SelectTrigger>
-                                                        <SelectContent>
-                                                            <SelectGroup>
-                                                                {
-                                                                    categories?.map((opt) => (
-                                                                        <SelectItem key={opt.id} value={opt.id || ""} className="capitalize">
-                                                                            {opt.name}
-                                                                        </SelectItem>
-                                                                    ))
-                                                                }
-                                                            </SelectGroup>
-                                                        </SelectContent>
-                                                    </Select>
-                                                </FormControl>
-                                            )
-                                    }
                                     <FormMessage />
                                 </FormItem>
                             )}
@@ -451,6 +297,197 @@ export const EquipmentForm = ({ equipment, offices, categories, services, review
                                 </FormItem>
                             )}
                         />
+
+                        <FormField
+                            control={control}
+                            name="officeId"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Oficina</FormLabel>
+                                    {
+                                        offices.length === 0
+                                            ? (<p className="text-sm text-muted-foreground">No hay oficinas disponibles</p>)
+                                            : (
+                                                <FormControl>
+                                                    <Select
+                                                        onValueChange={(value) => {
+                                                            field.onChange(value);
+                                                            const selectedOffice = offices.find(office => office.id === value);
+                                                            setOfficeSelected(selectedOffice?.name || null);
+                                                        }}
+                                                        value={field.value}
+                                                    >
+                                                        <SelectTrigger className="w-full">
+                                                            <SelectValue placeholder="Seleccionar oficina" />
+                                                        </SelectTrigger>
+                                                        <SelectContent>
+                                                            <SelectGroup>
+                                                                {
+                                                                    offices?.map((opt) => (
+                                                                        <SelectItem
+                                                                            key={opt.id}
+                                                                            value={opt.id || ""}
+                                                                            className="capitalize"
+                                                                        >
+                                                                            {opt.name}
+                                                                        </SelectItem>
+                                                                    ))
+                                                                }
+                                                            </SelectGroup>
+                                                        </SelectContent>
+                                                    </Select>
+                                                </FormControl>
+                                            )
+                                    }
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+
+                    <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-x-4 w-full">
+                        <FormField
+                            control={control}
+                            name="name"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Nombre</FormLabel>
+                                    <FormControl>
+                                        <Input {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={control}
+                            name="slug"
+                            rules={{ required: true }}
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Slug</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            {...field}
+                                            disabled
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={control}
+                            name="categoryId"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Categoría</FormLabel>
+                                    {
+                                        categories.length === 0
+                                            ? (<p className="text-sm text-muted-foreground">No hay categorías disponibles</p>)
+                                            : (
+                                                <FormControl>
+                                                    <Select onValueChange={field.onChange} value={field.value}>
+                                                        <SelectTrigger className="w-full">
+                                                            <SelectValue placeholder="Seleccionar categoría" />
+                                                        </SelectTrigger>
+                                                        <SelectContent>
+                                                            <SelectGroup>
+                                                                {
+                                                                    categories?.map((opt) => (
+                                                                        <SelectItem key={opt.id} value={opt.id || ""} className="capitalize">
+                                                                            {opt.name}
+                                                                        </SelectItem>
+                                                                    ))
+                                                                }
+                                                            </SelectGroup>
+                                                        </SelectContent>
+                                                    </Select>
+                                                </FormControl>
+                                            )
+                                    }
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+
+                    <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-x-4 w-full">
+                        <FormField
+                            control={control}
+                            name="location"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Ubicación</FormLabel>
+                                    {
+                                        !officeSelected ? (
+                                            <p className="text-sm text-muted-foreground">Seleccione una oficina primero</p>
+                                        ) : (
+                                            <FormControl>
+                                                <Select onValueChange={field.onChange} value={field.value}>
+                                                    <SelectTrigger className="w-full">
+                                                        <SelectValue placeholder="Seleccionar ubicación" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectGroup className="grid grid-cols-2">
+                                                            {
+                                                                officeSelected === 'primitivo'
+                                                                    ? primitivoLocations.map((opt) => (
+                                                                        <SelectItem key={opt} value={opt || ""}>
+                                                                            {opt}
+                                                                        </SelectItem>
+                                                                    ))
+                                                                    : officeSelected === 'buci'
+                                                                        ? buciLocations.map((opt) => (
+                                                                            <SelectItem key={opt} value={opt || ""}>
+                                                                                {opt}
+                                                                            </SelectItem>
+                                                                        ))
+                                                                    : (<SelectItem key="sinUbicacion" value="sinUbicacion">
+                                                                        Sin ubicación
+                                                                    </SelectItem>)
+                                                            }
+                                                        </SelectGroup>
+                                                    </SelectContent>
+                                                </Select>
+                                            </FormControl>
+                                        )
+                                    }
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={control}
+                            name="status"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Estado</FormLabel>
+                                    <FormControl>
+                                        <Select onValueChange={field.onChange} value={field.value}>
+                                            <SelectTrigger className="w-full">
+                                                <SelectValue placeholder="Seleccionar estado" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectGroup>
+                                                    {
+                                                        validEquipmentStatus.map((opt) => (
+                                                            <SelectItem key={opt} value={opt || ""}>
+                                                                {opt}
+                                                            </SelectItem>
+                                                        ))
+                                                    }
+                                                </SelectGroup>
+                                            </SelectContent>
+                                        </Select>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
                     </div>
 
                     {/* Divider */}
@@ -461,7 +498,7 @@ export const EquipmentForm = ({ equipment, offices, categories, services, review
                     </div>
 
                     {/* Specific */}
-                    <div className="grid grid-cols-2 gap-x-4 w-full">
+                    <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-x-4 w-full">
                         <FormField
                             control={control}
                             name="os"
@@ -519,9 +556,7 @@ export const EquipmentForm = ({ equipment, offices, categories, services, review
                                 </FormItem>
                             )}
                         />
-                    </div>
 
-                    <div className="grid grid-cols-2 gap-x-4 w-full">
                         <FormField
                             control={control}
                             name="ram"
@@ -550,6 +585,9 @@ export const EquipmentForm = ({ equipment, offices, categories, services, review
                                 </FormItem>
                             )}
                         />
+                    </div>
+
+                    <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-x-4 w-full">
 
                         <FormField
                             control={control}
@@ -579,9 +617,7 @@ export const EquipmentForm = ({ equipment, offices, categories, services, review
                                 </FormItem>
                             )}
                         />
-                    </div>
 
-                    <div className="grid grid-cols-2 gap-x-4 w-full">
                         <FormField
                             control={control}
                             name="videoCard"
@@ -613,10 +649,41 @@ export const EquipmentForm = ({ equipment, offices, categories, services, review
 
                         <FormField
                             control={control}
-                            name="storage"
+                            name="storage1"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Almacenamiento</FormLabel>
+                                    <FormLabel>Almacenamiento 1</FormLabel>
+                                    <FormControl>
+                                        <Select onValueChange={field.onChange} value={field.value}>
+                                            <SelectTrigger className="w-full">
+                                                <SelectValue placeholder="Seleccionar almacenamiento" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectGroup>
+                                                    {
+                                                        validEquipmentStorages.map((opt) => (
+                                                            <SelectItem key={opt} value={opt}>
+                                                                {opt}
+                                                            </SelectItem>
+                                                        ))
+                                                    }
+                                                </SelectGroup>
+                                            </SelectContent>
+                                        </Select>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+
+                    <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-x-4 w-full">
+                        <FormField
+                            control={control}
+                            name="storage2"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Almacenamiento 2</FormLabel>
                                     <FormControl>
                                         <Select onValueChange={field.onChange} value={field.value}>
                                             <SelectTrigger className="w-full">
@@ -664,7 +731,7 @@ export const EquipmentForm = ({ equipment, offices, categories, services, review
                         <ul className="flex flex-col gap-2">
                             {
                                 watch("services") && watch("services").map((serviceItem, index) => (
-                                    <li key={serviceItem.id} className="mb-4 p-4 border rounded-md grid md:grid-cols-12 gap-2 relative items-center justify-center">
+                                    <li key={serviceItem.id} className="mb-4 p-4 border rounded-md grid md:grid-cols-12 gap-2 relative items-center justify-center fadeIn">
                                         <Badge className="absolute left-1/2 top-2 transform -translate-x-1/2" variant="secondary">
                                             Servicio n° {index + 1}
                                         </Badge>
@@ -710,7 +777,6 @@ export const EquipmentForm = ({ equipment, offices, categories, services, review
                                                                 mode="single"
                                                                 selected={field.value ? new Date(field.value + 'T00:00:00') : undefined}
                                                                 onSelect={(date) => field.onChange(date ? date.toISOString().split('T')[0] : '')}
-                                                                disabled={(date) => date < new Date()}
                                                                 autoFocus
                                                             />
                                                         </PopoverContent>
@@ -758,7 +824,7 @@ export const EquipmentForm = ({ equipment, offices, categories, services, review
                         <ul className="flex flex-col gap-2">
                             {
                                 watch("reviews") && watch("reviews").map((reviewItem, index) => (
-                                    <li key={reviewItem.id} className="mb-4 p-4 border rounded-md grid md:grid-cols-12 gap-2 relative items-center justify-center">
+                                    <li key={reviewItem.id} className="mb-4 p-4 border rounded-md grid md:grid-cols-12 gap-2 relative items-center justify-center fadeIn">
                                         <Badge className="absolute left-1/2 top-2 transform -translate-x-1/2" variant="secondary">
                                             Contingencia n° {index + 1}
                                         </Badge>
@@ -792,7 +858,7 @@ export const EquipmentForm = ({ equipment, offices, categories, services, review
                                                                     className="text-left font-normal"
                                                                 >
                                                                     {field.value ? (
-                                                                        format(new Date(field.value + 'T00:00:00'), "PPP")
+                                                                        format(new Date(field.value + 'T12:00:00'), "PPP")
                                                                     ) : (
                                                                         <span>Seleccionar fecha</span>
                                                                     )}
@@ -802,8 +868,17 @@ export const EquipmentForm = ({ equipment, offices, categories, services, review
                                                         <PopoverContent className="w-auto p-0">
                                                             <Calendar
                                                                 mode="single"
-                                                                selected={field.value ? new Date(field.value + 'T00:00:00') : undefined}
-                                                                onSelect={(date) => field.onChange(date ? date.toISOString().split('T')[0] : '')}
+                                                                selected={field.value ? new Date(field.value + 'T12:00:00') : undefined}
+                                                                onSelect={(date) => {
+                                                                    if (date) {
+                                                                        const year = date.getFullYear();
+                                                                        const month = String(date.getMonth() + 1).padStart(2, '0');
+                                                                        const day = String(date.getDate()).padStart(2, '0');
+                                                                        field.onChange(`${year}-${month}-${day}`);
+                                                                    } else {
+                                                                        field.onChange('');
+                                                                    }
+                                                                }}
                                                                 disabled={(date) => date < new Date()}
                                                                 autoFocus
                                                             />

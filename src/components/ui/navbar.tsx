@@ -28,23 +28,23 @@ export const Navbar = ({ user }: Props) => {
     }, [isMenuOpen]);
 
     return (
-        <header className="relative w-full z-50">
-            <div className="flex items-center justify-between py-4 px-4 sm:px-8 w-full bg-white dark:bg-black">
+        <header className="relative w-full z-50 bg-white dark:bg-black">
+            <div className="flex items-center justify-between py-4 w-full container mx-auto">
                 {/* Desktop Navigation (Left) */}
                 <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-600 dark:text-gray-400 flex-1">
                     <div className="relative group">
                         <button className="hover:text-black dark:hover:text-white transition-colors flex items-center">
                             Relevamientos ▾
                         </button>
-                        <div className="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
+                        <div className="absolute top-full left-0 mt-2 w-48 bg-slate-100 dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
                             <div className="py-1">
-                                <Link href="/reports/primitivo" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-black dark:hover:text-white">
+                                <Link href="/surveys/primitivo" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800 hover:text-black dark:hover:text-white">
                                     Primitivo
                                 </Link>
-                                <Link href="/reports/buci" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-black dark:hover:text-white">
+                                <Link href="/surveys/buci" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800 hover:text-black dark:hover:text-white">
                                     BUCI
                                 </Link>
-                                <Link href="/reports/moldes" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-black dark:hover:text-white">
+                                <Link href="/surveys/moldes" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800 hover:text-black dark:hover:text-white">
                                     Moldes
                                 </Link>
                             </div>

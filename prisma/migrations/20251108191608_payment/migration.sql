@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "public"."payment" ADD COLUMN     "year" INTEGER NOT NULL DEFAULT EXTRACT(YEAR FROM NOW());

@@ -1,4 +1,6 @@
 
+"use client";
+
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { IoAddOutline } from "react-icons/io5";
@@ -7,7 +9,6 @@ import { Dialog, DialogClose, DialogContent, Popover, PopoverTrigger, PopoverCon
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createUpdateReview } from '@/actions';
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 
 interface Props {
     equipmentId: string;
@@ -24,7 +25,6 @@ type ReviewFormValues = z.infer<typeof reviewSchema>;
 
 export const HandleAddReviews = ({ equipmentId }: Props) => {
 
-    const router = useRouter();
     const form = useForm<ReviewFormValues>({
         resolver: zodResolver(reviewSchema),
         defaultValues: {
@@ -39,6 +39,7 @@ export const HandleAddReviews = ({ equipmentId }: Props) => {
 
         const formData = new FormData();
 
+        formData.append("id", "");
         formData.append("equipmentId", equipmentId);
         formData.append("description", data.description);
         formData.append("date", data.date);
@@ -54,7 +55,7 @@ export const HandleAddReviews = ({ equipmentId }: Props) => {
 
         toast.success(message);
         form.reset();
-        router.refresh();
+        window.location.reload();
     };
 
     return (
@@ -112,7 +113,7 @@ export const HandleAddReviews = ({ equipmentId }: Props) => {
                                                 mode="single"
                                                 selected={field.value ? new Date(field.value + 'T00:00:00') : undefined}
                                                 onSelect={(date) => field.onChange(date ? date.toISOString().split('T')[0] : '')}
-                                                disabled={(date) => date < new Date()}
+                                                disabled={(date) => date > new Date()}
                                                 autoFocus
                                             />
                                         </PopoverContent>

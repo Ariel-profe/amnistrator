@@ -15,11 +15,18 @@ interface Props {
     equipment: (Equipment 
     & { office: { name: string } } 
     & { services: { id: number; description: string; date: string }[] } 
-    & { reviews: { id: number; description: string; date: string, boxNumber: number, priority: string }[] }) | null;
+    & { reviews:
+        {   id: number; 
+            description: string; 
+            date: string;
+            boxNumber: number; 
+            priority: string; 
+            user: { name: string } 
+        }[] }        
+    ) | null;
 };
 
-export const HandleViewEquipment = ({ equipment }: Props) => {       
-
+export const HandleViewEquipment = ({ equipment }: Props) => {              
     return (
         <Dialog>
             <form>
@@ -63,7 +70,7 @@ export const HandleViewEquipment = ({ equipment }: Props) => {
                                     Tarjeta gráfica: <span className="font-normal text-slate-200">{equipment?.videoCard}</span>
                                 </DialogDescription>
                                 <DialogDescription className="flex items-center gap-x-1">
-                                    Almacenamiento: <span className="font-normal text-slate-200">{equipment?.storage}</span>
+                                    Almacenamiento: <span className="font-normal text-slate-200">{equipment?.storage1}</span>
                                 </DialogDescription>
                             </div>
                         </div>
@@ -92,14 +99,14 @@ export const HandleViewEquipment = ({ equipment }: Props) => {
                         {/* Divider */}
                         <div className="my-4 border-t border-slate-700 max-w-sm mx-auto w-full" />
 
-                        {/* Servicio tecnico */}
+                        {/* Contingencias */}
                         <DialogTitle className="text-sm mb-2 text-red-500">Contingencias:</DialogTitle>
                         {
                             equipment?.reviews && equipment.reviews.length > 0 ? (
                                 <ul className="list-disc list-inside space-y-1 max-h-60 overflow-y-auto pr-2">
                                     {equipment.reviews.map((review) => (
                                         <li key={review.id} className="text-sm text-slate-200">
-                                            <span className="text-primary">(Fecha: {format(new Date(review.date), 'dd/MM/yyyy')})</span>
+                                            <span className="text-muted-foreground">{format(new Date(review.date), 'dd/MM/yyyy')}</span>
                                             {" "}-
                                             <span> {review.description} </span>
                                         </li>

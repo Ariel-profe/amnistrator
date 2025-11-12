@@ -1,12 +1,9 @@
 
 import type { Metadata } from "next";
-import Link from "next/link";
 import { unauthorized } from "next/navigation";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, ContentLayout, EmailVerificationAlert, ProfileInformation, GlobalAnalyticsChart, DashboardTooltip } from "@/components";
+import { ContentLayout, EmailVerificationAlert, ProfileInformation, DashboardTooltip, SectionCards, EquipmentChart } from "@/components";
 import { getServerSession } from "@/lib/get-server-session";
-import { SectionCards } from "@/components/admin/dashboard/section-cards";
-import { ChartAreaInteractive } from "@/components/admin/dashboard/chart-area-interactive";
-import { getTotalEquipments, getTotalEquipmentsByOfficeName } from "@/actions";
+import { getTotalPayments, getTotalEquipmentsByOfficeName } from "@/actions";
 
 export const metadata: Metadata = {
   title: "Panel administrativo",
@@ -15,9 +12,9 @@ export const metadata: Metadata = {
 
 export default async function AdminDashboardPage() {
 
-  const [session, totalEquipments, primitivoEquipments, buciEquipments, moldesEquipments] = await Promise.all([
+  const [session, totalPayments, primitivoEquipments, buciEquipments, moldesEquipments] = await Promise.all([
     getServerSession(),
-    getTotalEquipments(),
+    getTotalPayments(),
     getTotalEquipmentsByOfficeName('primitivo'),
     getTotalEquipmentsByOfficeName('buci'),
     getTotalEquipmentsByOfficeName('moldes'),
@@ -35,12 +32,18 @@ export default async function AdminDashboardPage() {
         {!user.emailVerified && <EmailVerificationAlert />}
         <ProfileInformation user={user} />
         <SectionCards 
-          totalEquipments={totalEquipments}
+          totalPayments={totalPayments}
           primitivoEquipments={primitivoEquipments}
           buciEquipments={buciEquipments}
           moldesEquipments={moldesEquipments}
         />
-        <ChartAreaInteractive />
+
+        <div className="grid sm:grid-cols-2 gap-4">
+          <EquipmentChart />
+          <EquipmentChart />
+          <EquipmentChart />
+          <EquipmentChart />
+        </div>
       </div>
     </ContentLayout>
   );

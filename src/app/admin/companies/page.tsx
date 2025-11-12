@@ -1,18 +1,9 @@
 export const revalidate = 0; // Disable revalidation for this page
 
-import Link from 'next/link';
-
-import { PageTitle, Button, ContentLayout, CompaniesTable } from '@/components';
 import { getCompanies } from '@/actions';
+import { PageTitle, ContentLayout, CompaniesTable, CreateButton } from '@/components';
 
-interface Props {
-    searchParams: Promise<{ page?: string }>
-};
-
-export default async function CompaniesAdminPage({ searchParams }: Props) {
-
-    const page = (await searchParams).page ? parseInt((await searchParams).page!) : 1;
-
+export default async function CompaniesAdminPage() {
     const companies = await getCompanies();
 
     const countCompanies = companies?.length === 1 ? "1 empresa" : companies?.length ? `${companies.length} empresas` : "0 empresas";
@@ -25,9 +16,7 @@ export default async function CompaniesAdminPage({ searchParams }: Props) {
             />
 
             <div className='mt-5 flex justify-end'>
-                <Button>
-                    <Link href={`/admin/companies/new`}>Crear empresa</Link>
-                </Button>
+                <CreateButton title="Crear empresa" href="/admin/companies/new" />
             </div>
 
             {

@@ -1,49 +1,36 @@
 export const revalidate = 0; // Disable revalidation for this page
 
 import Link from 'next/link';
-
-import { getEquipmentByOffice } from '@/actions/common/get-equipments-by-office';
-import { PageTitle, Button, EquipmentTable, ContentLayout } from '@/components';
-import { getServerSession } from '@/lib/get-server-session';
 import { unauthorized } from 'next/navigation';
 
-interface Props {
-    params: Promise<{ office: string }>
-};
+import { getEquipmentByOffice } from '@/actions/common/get-equipments-by-office';
+import { PageTitle, EquipmentTable } from '@/components';
+import { getServerSession } from '@/lib/get-server-session';
 
-export default async function OfficeAdminPage({ params }: Props) {
+export default async function MoldesPage() {
 
     const session = await getServerSession();
     const user = session?.user;
+
     if (!user) unauthorized();
 
-    const office = (await params).office;
-    const equipmentData = await getEquipmentByOffice(office);
-
-    // Transform the equipment data to match EquipmentTable expected type
+    const equipmentData = await getEquipmentByOffice("moldes");
     const equipment = equipmentData.map(item => ({
         ...item,
         reviews: item.reviews.map(review => ({
-            id: review.id,
-            description: review.description,
-            date: review.date,
-            boxNumber: review.boxNumber ?? 0, // Handle null values
-            priority: review.priority as "alta" | "media" | "baja"
+            ...review,
+            boxNumber: review.boxNumber ?? 0
         }))
     }));
 
+    const office = "moldes";    
+
     return (
-        <ContentLayout title={office}>
+        <section className="container mx-auto px-3 mt-10">
             <PageTitle
                 title={`Gestión de ${equipment.length} equipos`}
                 description={`Administracion de equipos de ${office}`}
             />
-
-            <div className='mt-5 flex justify-end'>
-                <Button>
-                    <Link href={`/admin/reports/equipment/new`}>Crear equipo</Link>
-                </Button>
-            </div>
 
             {
                 equipment.length === 0
@@ -57,6 +44,6 @@ export default async function OfficeAdminPage({ params }: Props) {
                         equipment={equipment}
                     />
             }
-        </ContentLayout>
+        </section>
     );
 }

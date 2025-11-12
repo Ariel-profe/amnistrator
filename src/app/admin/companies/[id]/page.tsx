@@ -26,7 +26,7 @@ export default async function CompanyByIdAdminPage({ params }: Props) {
                 title={title}
                 description="Administra la información de la empresa."
             />
-            <CompanyForm company={company ?? {}} />
+            <CompanyForm company={company ?? undefined} />
         </ContentLayout>
     )
 }

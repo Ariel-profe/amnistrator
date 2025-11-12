@@ -1,6 +1,4 @@
-"use client";
 import Link from "next/link";
-import React from "react";
 
 export const Footer = () => {
     return (
@@ -14,22 +12,22 @@ export const Footer = () => {
                             className="w-12 h-12 rounded-full"
                         />
                         <h3 className="text-3xl font-extrabold">
-                            <span className="text-primary">AMN</span>istrator
+                            <span className="text-amn">AMN</span>istrator
                         </h3>
                     </div>
-                    <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+                    <p className="text-sm leading-relaxed">
                         Software de administración de datos para organizar y optimizar tu empresa.
                     </p>
                 </div>
                 <div className="space-y-4">
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                    <h3 className="text-xl font-bold">
                         Atajos
                     </h3>
                     <ul className="space-y-3">
                         <li>
                             <Link
                                 href="#"
-                                className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-teal-400 transition-colors duration-300"
+                                className="md:hover:text-primary transition"
                             >
                                 Inicio
                             </Link>
@@ -37,7 +35,7 @@ export const Footer = () => {
                         <li>
                             <Link
                                 href="#"
-                                className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-teal-400 transition-colors duration-300"
+                                className="md:hover:text-primary transition"
                             >
                                 Servicios
                             </Link>
@@ -45,7 +43,7 @@ export const Footer = () => {
                         <li>
                             <Link
                                 href="#"
-                                className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-teal-400 transition-colors duration-300"
+                                className="md:hover:text-primary transition"
                             >
                                 Abonos
                             </Link>
@@ -60,7 +58,7 @@ export const Footer = () => {
                         <li>
                             <Link
                                 href="#"
-                                className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-teal-400 transition-colors duration-300"
+                                className="md:hover:text-primary transition"
                             >
                                 Soporte
                             </Link>
@@ -68,7 +66,7 @@ export const Footer = () => {
                         <li>
                             <Link
                                 href="#"
-                                className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-teal-400 transition-colors duration-300"
+                                className="md:hover:text-primary transition"
                             >
                                 FAQs
                             </Link>
@@ -76,7 +74,7 @@ export const Footer = () => {
                         <li>
                             <Link
                                 href="#"
-                                className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-teal-400 transition-colors duration-300"
+                                className="md:hover:text-primary transition"
                             >
                                 Política de Privacidad
                             </Link>
@@ -85,7 +83,7 @@ export const Footer = () => {
                 </div>
                 <div className="space-y-4">
                     <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
-                        Contáctanos
+                        Contactanos
                     </h3>
                     <p className="text-gray-600 dark:text-gray-300">
                         Email: soporte@amn.com.ar
@@ -100,7 +98,7 @@ export const Footer = () => {
             </div>
             <div className="text-center text-gray-500 dark:text-gray-400 text-sm pt-5 mt-5 border-t border-gray-200 dark:border-gray-700">
                 <p className="mt-1">
-                    Creado por <a href="#" className="text-primary hover:underline">AMN Consultora Informática</a>
+                    Creado por <a href="#" className="text-amn hover:underline">AMN Consultora Informática</a>
                 </p>
                 <p>
                     &copy; {new Date().getFullYear()} Todos los derechos reservados.

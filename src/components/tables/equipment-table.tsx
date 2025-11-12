@@ -2,20 +2,18 @@
 
 import Link from 'next/link';
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
-import { IoAddOutline, IoPencilSharp } from 'react-icons/io5';
+import { IoPencilSharp } from 'react-icons/io5';
 import { Equipment } from '@/generated/prisma';
-
-import { HandleDeleteButton } from '@/components';
-import { HandleViewEquipment } from './handle-view-equipment';
 import clsx from 'clsx';
-import { HandleAddReviews } from './handle-add-reviews';
+
+import { HandleDeleteButton, HandleViewEquipment, HandleAddReviews } from '@/components';
 
 interface Props {
     equipment: (
         Equipment
         & { office: { name: string } }
         & { services: { id: number; description: string; date: string }[] }
-        & { reviews: { id: number; description: string; date: string, boxNumber: number, priority: string }[] }
+        & { reviews: { id: number; description: string; date: string, boxNumber: number, priority: string; user: { name: string } }[] }
     )[];
     userRole: string;
 };
@@ -29,14 +27,17 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 export const EquipmentTable = ({ equipment, userRole }: Props) => {
+
+
     const columns: GridColDef[] = [
-        { field: 'tag', headerName: 'Etiqueta', width: 150 },
-        { field: 'name', headerName: 'Nombre', width: 300 },
+        { field: 'tag', headerName: 'Etiqueta', width: 100 },
+        { field: 'name', headerName: 'Nombre', width: 150 },
         { field: 'os', headerName: 'Sistema Operativo', width: 200 },
+        { field: 'storage1', headerName: 'Almacenamiento 1', width: 200 },
         { field: 'processor', headerName: 'Procesador', width: 200 },
         { field: 'ram', headerName: 'RAM', width: 100 },
         {
-            field: 'status', headerName: 'Estado', width: 100,
+            field: 'status', headerName: 'Estado', width: 150,
             renderCell: ({ row }: GridRenderCellParams) => {
                 const colorClass = STATUS_COLORS[row.status as string] || "text-gray-500";
                 return (
@@ -52,6 +53,7 @@ export const EquipmentTable = ({ equipment, userRole }: Props) => {
         {
             field: 'view',
             headerName: 'Ver',
+            width: 150,
             renderCell: ({ row }: GridRenderCellParams) => {
                 const foundEquipment = equipment.find(eq => eq.id === row.id);
                 if (!foundEquipment) return null;
@@ -72,9 +74,11 @@ export const EquipmentTable = ({ equipment, userRole }: Props) => {
         {
             field: 'edit',
             headerName: "Editar",
+            cellClassName: 'text-gray-100',
+            headerClassName: 'text-gray-900',
             renderCell: ({ row }: GridRenderCellParams) => {
                 return (
-                    <Link href={`/admin/reports/equipment/${row.slug}`} className="hover:underline text-blue-600 hover:text-blue-800 flex items-center h-full justify-center">
+                    <Link href={`/admin/surveys/equipment/${row.slug}`} className="hover:underline text-blue-600 hover:text-blue-800 flex items-center h-full justify-center">
                         <IoPencilSharp size={20} />
                     </Link>
                 )
@@ -83,6 +87,8 @@ export const EquipmentTable = ({ equipment, userRole }: Props) => {
         {
             field: 'delete',
             headerName: 'Eliminar',
+            cellClassName: 'text-gray-100',
+            headerClassName: 'text-gray-900',
             renderCell: ({ row }: GridRenderCellParams) => {
                 return (
                     <HandleDeleteButton id={row.id} model="equipment" />
@@ -98,6 +104,7 @@ export const EquipmentTable = ({ equipment, userRole }: Props) => {
         slug: item.slug,
         office: item.office.name,
         os: item.os,
+        storage1: item.storage1,
         processor: item.processor,
         ram: item.ram,
         status: item.status,
@@ -123,4 +130,4 @@ export const EquipmentTable = ({ equipment, userRole }: Props) => {
             </div>
         </div>
     )
-}
+};

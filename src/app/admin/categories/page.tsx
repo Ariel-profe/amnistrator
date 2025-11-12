@@ -1,17 +1,9 @@
 export const revalidate = 0; // Disable revalidation for this page
 
-import Link from 'next/link';
-
-import { PageTitle, Button, ContentLayout, CategoriesTable, CreateButton } from '@/components';
+import { PageTitle, ContentLayout, CategoriesTable, CreateButton } from '@/components';
 import { getCategories } from '@/actions';
 
-interface Props {
-    searchParams: Promise<{ page?: string }>
-};
-
-export default async function CategoriesAdminPage({ searchParams }: Props) {
-
-    const page = (await searchParams).page ? parseInt((await searchParams).page!) : 1;
+export default async function CategoriesAdminPage() {
 
     const categories = await getCategories();
 

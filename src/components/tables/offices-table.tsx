@@ -13,30 +13,30 @@ export const OfficesTable = ({ offices }: Props) => {
 
     return (
         <div className="my-10">
-            <table className="min-w-full">
-                <thead className="bg-gray-200 border-b">
-                    <tr>
+             <table className="min-w-4xl mx-auto">
+                <thead className="bg-slate-100 dark:bg-slate-900 border-b ">
+                    <tr className="text-sm font-medium text-slate-700 dark:text-slate-300">
                         <th
                             scope="col"
-                            className="text-sm font-medium text-gray-900 px-6 py-4 text-left max-w-[100px]"
+                            className="px-6 py-4 text-left max-w-[100px]"
                         >
                             #ID
                         </th>
                         <th
                             scope="col"
-                            className="text-sm font-medium text-gray-900 px-6 py-4 text-left"
+                            className="px-6 py-4 text-left"
                         >
                             Nombre
                         </th>
                         <th
                             scope="col"
-                            className="text-sm font-medium text-gray-900 px-6 py-4 text-left"
+                            className="px-6 py-4 text-left"
                         >
                             Editar
                         </th>
                         <th
                             scope="col"
-                            className="text-sm font-medium text-gray-900 px-6 py-4 text-left"
+                            className="px-6 py-4 text-left"
                         >
                             Eliminar
                         </th>

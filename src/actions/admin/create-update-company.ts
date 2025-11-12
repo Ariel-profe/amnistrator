@@ -23,7 +23,7 @@ export const createUpdateCompany = async (formData: FormData) => {
 
     const data = Object.fromEntries(formData);
 
-    let companyParsed = companySchema.safeParse(data);
+    const companyParsed = companySchema.safeParse(data);
 
     if (!companyParsed.success) {
         console.error("Error al validar algun campo:", companyParsed.error.message);

@@ -1,17 +1,16 @@
 "use client";
 
-import { useState } from "react";
-import z from "zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { IoSaveOutline } from "react-icons/io5";
+import z from "zod";
 import { toast } from "sonner";
 
 import { Office } from "@/generated/prisma";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input, LoadingButton } from "@/components";
 
 import { createUpdateOffice } from "@/actions";
-import { IoSaveOutline } from "react-icons/io5";
 
 interface Props {
     office: Office | undefined;
@@ -25,8 +24,6 @@ type OfficeFormValues = z.infer<typeof officeSchema>;
 
 export const OfficeForm = ({ office }: Props) => {
 
-    const [error, setError] = useState<string | null>(null);
-
     const form = useForm<OfficeFormValues>({
         resolver: zodResolver(officeSchema),
         defaultValues: {
@@ -37,7 +34,6 @@ export const OfficeForm = ({ office }: Props) => {
     const router = useRouter();
 
     const onSubmit = async (data: OfficeFormValues) => {
-        setError(null);
         const formData = new FormData();
 
         // Append all form fields to FormData
@@ -90,11 +86,6 @@ export const OfficeForm = ({ office }: Props) => {
                         />
                     </div>
                 </div>
-                {error && (
-                    <div role="alert" className="text-sm text-red-a600">
-                        {error}
-                    </div>
-                )}
             </form>
         </Form>
     );

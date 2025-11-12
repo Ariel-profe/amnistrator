@@ -18,7 +18,7 @@ export const createUpdateOffice = async (formData: FormData) => {
 
     const data = Object.fromEntries(formData);
 
-    let officeParsed = officeSchema.safeParse(data);
+    const officeParsed = officeSchema.safeParse(data);
 
     if (!officeParsed.success) {
         console.error("Error al validar algun campo:", officeParsed.error.message);
@@ -40,11 +40,11 @@ export const createUpdateOffice = async (formData: FormData) => {
             if (id) {
                 office = await tx.office.update({
                     where: { id: id },
-                    data: { name: rest.name as any }
+                    data: { name: rest.name as string }
                 })
             } else {
                 office = await tx.office.create({
-                    data: { name: rest.name as any }
+                    data: { name: rest.name as string }
                 })
             };
 

@@ -1,5 +1,5 @@
 import { IconType } from "react-icons";
-import { IoAppsOutline, IoBagOutline, IoConstructOutline, IoDiceOutline, IoGridOutline, IoLayersOutline, IoNewspaperOutline, IoPeopleOutline, IoSettingsOutline, IoTicketOutline } from "react-icons/io5";
+import { IoAppsOutline, IoBagOutline, IoCodeSlashOutline, IoConstructOutline, IoDiceOutline, IoGridOutline, IoLayersOutline, IoNewspaperOutline, IoPeopleOutline, IoTicketOutline } from "react-icons/io5";
 
 type Submenu = {
   href: string;
@@ -11,6 +11,7 @@ type Menu = {
   href: string;
   label: string;
   active?: boolean;
+  disabled?: boolean;
   createHref?: string;
   icon: IconType;
   submenus?: Submenu[];
@@ -26,6 +27,12 @@ export function getCommonMenuList(pathname: string): Group[] {
     {
       groupLabel: "Inicio",
       menus: [
+        {
+          href: "/",
+          label: "Sitio web",
+          icon: IoCodeSlashOutline,
+          submenus: []
+        },
         {
           href: "/admin",
           label: "Panel general",
@@ -46,12 +53,14 @@ export function getCommonMenuList(pathname: string): Group[] {
         {
           href: "/admin/payments",
           label: "Abonos",
-          icon: IoTicketOutline
+          icon: IoTicketOutline,
+          createHref: "/admin/payments/new"
         },
         {
           href: "/admin/servicios",
           label: "Servicios",
-          icon: IoConstructOutline
+          icon: IoConstructOutline,
+          disabled: true
         },
         {
           href: "/admin/users",
@@ -64,17 +73,17 @@ export function getCommonMenuList(pathname: string): Group[] {
       groupLabel: "Relevamientos",
       menus: [
         {
-          href: "/admin/reports/primitivo",
+          href: "/admin/surveys/primitivo",
           label: "Primitivo",
           icon: IoNewspaperOutline
         },
         {
-          href: "/admin/reports/buci",
+          href: "/admin/surveys/buci",
           label: "BUCI",
           icon: IoNewspaperOutline
         },
         {
-          href: "/admin/reports/moldes",
+          href: "/admin/surveys/moldes",
           label: "Moldes",
           icon: IoNewspaperOutline
         }
@@ -87,7 +96,7 @@ export function getCommonMenuList(pathname: string): Group[] {
           href: "/admin/equipments",
           label: "Equipos",
           icon: IoDiceOutline,
-          createHref: "/admin/equipments/new"
+          createHref: "/admin/surveys/equipment/new"
         },
         {
           href: "/admin/categories",

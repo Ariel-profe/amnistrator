@@ -1,36 +1,47 @@
 export const revalidate = 0; // Disable revalidation for this page
 
-import Link from 'next/link';
 import { unauthorized } from 'next/navigation';
 
 import { getEquipmentByOffice } from '@/actions/common/get-equipments-by-office';
-import { PageTitle, Button, EquipmentTable } from '@/components';
+import { PageTitle, EquipmentTable, ContentLayout, CreateButton } from '@/components';
 import { getServerSession } from '@/lib/get-server-session';
 
-export default async function MoldesPage() {
+interface Props {
+    params: Promise<{ office: string }>
+};
+
+export default async function OfficeAdminPage({ params }: Props) {
 
     const session = await getServerSession();
     const user = session?.user;
-
     if (!user) unauthorized();
 
-    const equipmentData = await getEquipmentByOffice("moldes");
+    const office = (await params).office;
+    const equipmentData = await getEquipmentByOffice(office);
+
+    // Transform the equipment data to match EquipmentTable expected type
     const equipment = equipmentData.map(item => ({
         ...item,
         reviews: item.reviews.map(review => ({
-            ...review,
-            boxNumber: review.boxNumber ?? 0
+            id: review.id,
+            description: review.description,
+            date: review.date,
+            boxNumber: review.boxNumber ?? 0, // Handle null values
+            priority: review.priority as "alta" | "media" | "baja",
+            user: review.user || { name: 'Unknown' }
         }))
     }));
 
-    const office = "moldes";
-
     return (
-        <section className="container mx-auto px-3 mt-10">
+        <ContentLayout title={office}>
             <PageTitle
                 title={`Gestión de ${equipment.length} equipos`}
                 description={`Administracion de equipos de ${office}`}
             />
+
+            <div className='mt-5 flex justify-end'>
+                <CreateButton title="Crear equipo" href="/admin/surveys/equipment/new" />
+            </div>
 
             {
                 equipment.length === 0
@@ -44,6 +55,6 @@ export default async function MoldesPage() {
                         equipment={equipment}
                     />
             }
-        </section>
+        </ContentLayout>
     );
 }

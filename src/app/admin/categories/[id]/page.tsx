@@ -26,7 +26,7 @@ export default async function CategoryByIdAdminPage({ params }: Props) {
                 title={title}
                 description="Administra la información de la categoría."
             />
-            <CategoryForm category={(category && 'ok' in category) ? {} : category ?? {}} />
+            <CategoryForm category={(category && 'ok' in category) ? undefined : category ?? undefined} />
         </ContentLayout>
     )
 }

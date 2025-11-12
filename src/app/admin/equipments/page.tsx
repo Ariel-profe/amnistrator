@@ -1,10 +1,6 @@
 export const revalidate = 0; // Disable revalidation for this page
 
-import Link from 'next/link';
-
-import { getEquipmentByOffice } from '@/actions/common/get-equipments-by-office';
-import { PageTitle, Button, EquipmentTable, ContentLayout } from '@/components';
-import { OfficeName } from '@/generated/prisma';
+import { PageTitle, EquipmentTable, ContentLayout, CreateButton } from '@/components';
 import { getServerSession } from '@/lib/get-server-session';
 import { unauthorized } from 'next/navigation';
 import { getEquipments } from '@/actions';
@@ -25,7 +21,8 @@ export default async function EquipmentsAdminPage() {
             description: review.description,
             date: review.date,
             boxNumber: review.boxNumber ?? 0, // Handle null values
-            priority: review.priority as "alta" | "media" | "baja"
+            priority: review.priority as "alta" | "media" | "baja",
+            user: { name: item.user?.name ?? "Unknown" }
         }))
     }));
 
@@ -37,9 +34,7 @@ export default async function EquipmentsAdminPage() {
             />
 
             <div className='mt-5 flex justify-end'>
-                <Button>
-                    <Link href={`/admin/relevamientos/equipo/new`}>Crear equipo</Link>
-                </Button>
+                <CreateButton title="Crear equipo" href="/admin/surveys/equipment/new" />
             </div>
 
             {

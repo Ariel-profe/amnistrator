@@ -19,7 +19,7 @@ export const createUpdateCategory = async (formData: FormData) => {
 
     const data = Object.fromEntries(formData);
 
-    let categoryParsed = categorySchema.safeParse(data);
+    const categoryParsed = categorySchema.safeParse(data);
 
    if (!categoryParsed.success) {
         console.error("Error al validar algun campo:", categoryParsed.error.message);
@@ -42,15 +42,15 @@ export const createUpdateCategory = async (formData: FormData) => {
                 category = await tx.category.update({
                     where: { id: id },
                     data: { 
-                        name: rest.name as any,
-                        slug: rest.slug as any
+                        name: rest.name,
+                        slug: rest.slug
                     }
                 })
             } else {
                 category = await tx.category.create({
                     data: { 
-                        name: rest.name as any,
-                        slug: rest.slug as any
+                        name: rest.name,
+                        slug: rest.slug
                     }
                 })
             };

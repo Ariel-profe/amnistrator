@@ -12,7 +12,21 @@ import { useIsMobile } from "@/hooks/use-mobile";
 
 export const description = "An interactive area chart";
 
-const chartData = [
+interface ChartDataItem {
+    date: string;
+    desktop: number;
+    mobile: number;
+}
+
+interface Props {
+    totalEquipments?: number;
+    chartData?: ChartDataItem[];
+    title?: string;
+    description?: string;
+}
+
+// Default chart data (fallback)
+const defaultChartData: ChartDataItem[] = [
     { date: "2024-04-01", desktop: 222, mobile: 150 },
     { date: "2024-04-02", desktop: 97, mobile: 180 },
     { date: "2024-04-03", desktop: 167, mobile: 120 },
@@ -120,7 +134,12 @@ const chartConfig = {
     },
 } satisfies ChartConfig;
 
-export function ChartAreaInteractive() {
+export function EquipmentChart({
+    totalEquipments,
+    chartData = defaultChartData,
+    title = "Total de equipos",
+    description = "Registrados en los últimos 3 meses"
+}: Props) {
     const isMobile = useIsMobile();
     const [timeRange, setTimeRange] = React.useState("90d");
 
@@ -144,12 +163,22 @@ export function ChartAreaInteractive() {
         return date >= startDate;
     });
 
+    // Calculate total from filtered data if totalEquipments is not provided
+    const displayTotal = totalEquipments ?? filteredData.reduce((sum, item) => sum + item.desktop + item.mobile, 0);
+
     return (
         <Card className="@container/card">
             <CardHeader>
-                <CardTitle>Total de equipos</CardTitle>
+                <CardTitle className="flex items-center justify-between">
+                    {title}
+                    {totalEquipments !== undefined && (
+                        <span className="text-2xl font-bold text-primary">
+                            {displayTotal.toLocaleString()}
+                        </span>
+                    )}
+                </CardTitle>
                 <CardDescription>
-                    <span className="hidden @[540px]/card:block">Registrados en los últimos 3 meses</span>
+                    <span className="hidden @[540px]/card:block">{description}</span>
                     <span className="@[540px]/card:hidden">Últimos 3 meses</span>
                 </CardDescription>
                 <CardAction>

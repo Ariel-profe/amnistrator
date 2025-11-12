@@ -139,7 +139,7 @@ export function SignUpForm() {
           className="h-12 w-auto"
         />
         <p className="">
-          <span className="text-primary">AMN</span>istrator
+          <span className="text-amn">AMN</span>istrator
         </p>
       </div>
       <CardHeader>

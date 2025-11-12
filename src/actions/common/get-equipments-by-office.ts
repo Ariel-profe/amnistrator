@@ -18,7 +18,20 @@ export const getEquipmentByOffice = async (officeName: string) => {
                 }
             },
             services: true,
-            reviews: true
+            reviews: {
+                select: {
+                    id: true,
+                    description: true,
+                    date: true,
+                    boxNumber: true,
+                    priority: true,
+                    user: {
+                        select: {
+                            name: true,
+                        }
+                    }
+                }
+            }
         },
         orderBy: {
             name: 'desc'

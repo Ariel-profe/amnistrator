@@ -14,14 +14,15 @@ const equipmentSchema = z.object({
         .transform(val => Number(val.toFixed(0))),
     name: z.string().min(3).max(100),
     slug: z.string().min(3).max(100),
-    location: z.enum(["sinUbicacion", "datos", "finanzas", "salaDeReuniones", "administracion", "deposito", "rack"]),
-    status: z.enum(["solicitado", "revision", "fueraDeServicio", "alternativo", "operativo"]),
-    os: z.string().min(2).max(50),
-    processor: z.string().min(2).max(50),
-    ram: z.string().min(2).max(50),
-    motherboard: z.string().min(2).max(50),
-    videoCard: z.string().min(2).max(50),
-    storage: z.string().min(2).max(50)
+    location: z.string(),
+    status: z.string(),
+    os: z.string().min(2).max(100),
+    processor: z.string().min(2).max(100),
+    ram: z.string().min(2).max(100),
+    motherboard: z.string().min(2).max(100),
+    videoCard: z.string().min(2).max(100),
+    storage1: z.string().min(2).max(100),
+    storage2: z.string().min(2).max(100).optional().nullable(),
 })
 
 export const createUpdateEquipment = async (formData: FormData) => {
@@ -33,7 +34,7 @@ export const createUpdateEquipment = async (formData: FormData) => {
 
     const data = Object.fromEntries(formData);
 
-    let productParsed = equipmentSchema.safeParse(data);
+    const productParsed = equipmentSchema.safeParse(data);
 
     if (!productParsed.success) {
         console.error("Error al validar algun campo:", productParsed.error.message);
@@ -49,12 +50,12 @@ export const createUpdateEquipment = async (formData: FormData) => {
 
     const { id, ...rest } = equipment;
 
-    let servicesItems: { 
+    const servicesItems: { 
         description: string; 
         date: string 
     }[] = [];
 
-    let reviewsItems: { 
+    const reviewsItems: { 
         description: string; 
         date: string; 
         boxNumber?: number; 
@@ -105,6 +106,7 @@ export const createUpdateEquipment = async (formData: FormData) => {
                     where: { id: id },
                     data: {
                         ...rest,
+                        name: rest.name.trim().toLowerCase(),
                         officeId: data.officeId as string,
                         categoryId: data.categoryId as string,
                         companyId: data.companyId as string,
@@ -156,6 +158,7 @@ export const createUpdateEquipment = async (formData: FormData) => {
                 equipment = await tx.equipment.create({
                     data: {
                         ...rest,
+                        name: rest.name.trim().toLowerCase(),
                         officeId: data.officeId as string,
                         categoryId: data.categoryId as string,
                         companyId: data.companyId as string,
@@ -216,11 +219,12 @@ export const createUpdateEquipment = async (formData: FormData) => {
         } else if (error instanceof Error && error.name === 'PrismaClientKnownRequestError') {
             console.error('Error al crear o actualizar el equipo:', error.message);
 
-            const errorField = (error as any).meta?.target?.[0];
+            const prismaError = error as Prisma.PrismaClientKnownRequestError;
+            const errorField = Array.isArray(prismaError.meta?.target) ? prismaError.meta.target[0] : 'Hubo un error';
 
             return {
                 ok: false,
-                message: `${errorField === 'tag' ? 'esa etiqueta ya existe' : errorField === 'slug' ? 'ese slug ya existe' : errorField === 'name' ? 'ese nombre ya existe' : error}.`,
+                message: `${errorField === 'tag' ? 'Esa etiqueta ya existe' : errorField === 'slug' ? 'Ese slug ya existe' : errorField === 'name' ? 'Ese nombre ya existe' : error}.`,
             }
         }
 

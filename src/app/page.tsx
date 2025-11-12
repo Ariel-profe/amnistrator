@@ -38,12 +38,6 @@ export default async function InitialPage() {
                 </p>
                 <div className="mt-12 flex items-center justify-center gap-4">
                     <Link
-                        href="/home"
-                        className="inline-block rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary/80"
-                    >
-                        Panel de control
-                    </Link>
-                    <Link
                         href="/sign-in"
                         className="inline-block rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary/80"
                     >

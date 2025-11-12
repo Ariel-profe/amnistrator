@@ -18,11 +18,19 @@ const reviewSchema = z.object({
 export const createUpdateReview = async(formData: FormData) => {
     const session = await getServerSession();
     const user = session?.user;
-    if(!user) unauthorized();
+    if(!user) unauthorized();    
 
     const data = Object.fromEntries(formData);
 
-    const reviewParsed = reviewSchema.safeParse(data);    
+    // Convert numeric fields from string to number
+    const parsedData = {
+        ...data,
+        id: data.id ? Number(data.id) : undefined,
+        boxNumber: data.boxNumber ? Number(data.boxNumber) : undefined,
+        userId: user.id
+    };
+
+    const reviewParsed = reviewSchema.safeParse(parsedData);    
 
     if(!reviewParsed.success) {
         console.error("Error al validar algun campo:", reviewParsed.error.message);
@@ -47,7 +55,6 @@ export const createUpdateReview = async(formData: FormData) => {
                         data: { 
                             ...rest,
                             equipmentId: rest.equipmentId,
-                            userId: user.id
                         }
                     })
                 } else {
@@ -55,7 +62,6 @@ export const createUpdateReview = async(formData: FormData) => {
                         data: { 
                             ...rest,
                             equipmentId: rest.equipmentId,
-                            userId: user.id 
                         }
                     })
                 };

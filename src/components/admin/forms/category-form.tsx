@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import z from "zod";
@@ -13,7 +13,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input, 
 import { IoSaveOutline } from "react-icons/io5";
 
 interface Props {
-    category: Category;
+    category?: Category;
 };
 
 const categorySchema = z.object({
@@ -25,8 +25,6 @@ type CategoryFormValues = z.infer<typeof categorySchema>;
 
 export const CategoryForm = ({ category }: Props) => {
 
-    const [error, setError] = useState<string | null>(null);
-
     const form = useForm<CategoryFormValues>({
         resolver: zodResolver(categorySchema),
         defaultValues: {
@@ -35,7 +33,7 @@ export const CategoryForm = ({ category }: Props) => {
         }
     });
 
-    const { handleSubmit, watch, setValue, clearErrors, formState: { isSubmitting }, control } = form;
+    const { handleSubmit, watch, setValue, clearErrors, control } = form;
 
     const router = useRouter();
 
@@ -63,7 +61,6 @@ export const CategoryForm = ({ category }: Props) => {
     }, [watch, setValue, clearErrors]);
 
     const onSubmit = async (data: CategoryFormValues) => {
-        setError(null);
         const formData = new FormData();
 
         // Append all form fields to FormData
@@ -133,12 +130,6 @@ export const CategoryForm = ({ category }: Props) => {
                             )}
                         />
                     </div>
-
-                    {error && (
-                        <div role="alert" className="text-sm text-red-a600">
-                            {error}
-                        </div>
-                    )}
                 </div>
             </form>
         </Form>

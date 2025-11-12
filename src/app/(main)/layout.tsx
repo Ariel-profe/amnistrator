@@ -15,7 +15,9 @@ export default async function MainLayout({ children }: { children: ReactNode }) 
   return (
     <main>
       <Navbar user={user} />
-      {children}
+      <div>
+        {children}
+      </div>
       <Footer />
     </main>
   );

@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { Ellipsis, LogOut } from "lucide-react";
 import { toast } from "sonner";
 
-import { Button, ScrollArea, Tooltip, TooltipTrigger, TooltipContent, TooltipProvider, CollapseMenuButton, CreateButton } from "@/components";
+import { Button, ScrollArea, Tooltip, TooltipTrigger, TooltipContent, TooltipProvider, CollapseMenuButton, Badge } from "@/components";
 import { cn } from "@/lib/utils";
 import { getCommonMenuList } from "@/lib/sidebar-menu-list";
 import { authClient } from "@/lib/auth-client";
@@ -57,7 +57,7 @@ export function Menu({ isOpen }: MenuProps) {
                 <p className="pb-2"></p>
               )}
               {menus.map(
-                ({ href, label, icon: Icon, active, submenus, createHref }, index) =>
+                ({ href, label, icon: Icon, active, submenus, createHref, disabled }, index) =>
                   !submenus || submenus.length === 0 ? (
                     <div className="w-full" key={index}>
                       <TooltipProvider disableHoverableContent>
@@ -100,7 +100,11 @@ export function Menu({ isOpen }: MenuProps) {
                                     <IoAddOutline />
                                   </Link>
                                 </Button>
-                              )}
+                              )}{
+                                disabled && (
+                                  <Badge variant="outline" className="bg-yellow-800 absolute right-1">Pro</Badge>
+                                )
+                              }
                             </div>
                           </TooltipTrigger>
                           {isOpen === false && (

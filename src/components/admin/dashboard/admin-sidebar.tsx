@@ -35,7 +35,7 @@ export function AdminSidebar() {
         >
           <Link href="/admin" className="flex items-center gap-2">
             <div className="bg-slate-300 p-1 rounded-md flex justify-center items-center">
-              <Command className="w-8 h-8 text-primary" />
+              <Command className="w-8 h-8 text-amn" />
             </div>
             <h1
               className={cn(
@@ -45,7 +45,7 @@ export function AdminSidebar() {
                   : "translate-x-0 opacity-100"
               )}
             >
-              <span className="text-primary">AMN</span>istrator
+              <span className="text-amn">AMN</span>istrator
             </h1>
           </Link>
         </Button>

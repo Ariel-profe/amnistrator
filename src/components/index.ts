@@ -52,23 +52,23 @@ export * from './admin/common/create-button';
 export * from './admin/dashboard/admin-navbar';
 export * from './admin/dashboard/admin-panel-layout';
 export * from './admin/dashboard/admin-sidebar';
-export * from './admin/dashboard/chart-area-interactive';
+export * from './admin/dashboard/equipment-chart';
 export * from './admin/dashboard/collapse-menu-button';
 export * from './admin/dashboard/content-layout';
 export * from './admin/dashboard/email-verification-alert';
-export * from './admin/dashboard/global-analytics-chat';
 export * from './admin/dashboard/menu';
 export * from './admin/dashboard/profile-information';
 export * from './admin/dashboard/resend-verification-button';
 export * from './admin/dashboard/section-cards';
 export * from './admin/dashboard/sheet-menu';
 export * from './admin/dashboard/sidebar-toggle';
-export * from './admin/forms/category-form';
 
 // Forms Components
+export * from './admin/forms/category-form';
 export * from './admin/forms/company-form';
 export * from './admin/forms/equipment-form';
 export * from './admin/forms/office-form';
+export * from './admin/forms/payment-form';
 
 // Profile Components
 export * from './profile/email-form';
@@ -81,7 +81,16 @@ export * from './tables/categories-table';
 export * from './tables/companies-table';
 export * from './tables/equipment-table';
 export * from './tables/offices-table';
+export * from './tables/payments-table';
 export * from './admin/users/users-table';
+export * from './tables/handle-add-reviews';
+export * from './tables/handle-add-update-payment-item';
+export * from './tables/handle-view-equipment';
+export * from './tables/handle-view-payment';
+
+// Homepage Components
+export * from './homepage/hero-section';
+export * from './homepage/clients-section';
 
 
 

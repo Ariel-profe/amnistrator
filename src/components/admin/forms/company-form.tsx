@@ -5,16 +5,16 @@ import z from "zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { IoSaveOutline } from "react-icons/io5";
 import { toast } from "sonner";
 
 import { Company } from "@/generated/prisma";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input, LoadingButton } from "@/components";
 
 import { createUpdateCompany } from "@/actions";
-import { IoSaveOutline } from "react-icons/io5";
 
 interface Props {
-    company: Company;
+    company?: Company;
 };
 
 const companySchema = z.object({
@@ -44,7 +44,7 @@ export const CompanyForm = ({ company }: Props) => {
         }
     });
 
-    const { handleSubmit, watch, setValue, clearErrors, formState: { isSubmitting }, control } = form;
+    const { handleSubmit, watch, setValue, clearErrors, control } = form;
 
     useEffect(() => {
         const subscription = watch((value, { name }) => {
@@ -114,7 +114,7 @@ export const CompanyForm = ({ company }: Props) => {
 
                 <div className="grid mb-16 gap-3 mt-5">
                     {/* Required */}
-                    <div className="grid grid-cols-2 gap-x-4 w-full">
+                    <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-x-4 w-full">
                         <FormField
                             control={control}
                             name="name"
@@ -146,9 +146,7 @@ export const CompanyForm = ({ company }: Props) => {
                                 </FormItem>
                             )}
                         />
-                    </div>
 
-                    <div className="grid grid-cols-2 gap-x-4 w-full">
                         <FormField
                             control={control}
                             name="email"
@@ -164,6 +162,9 @@ export const CompanyForm = ({ company }: Props) => {
                             )}
 
                         />
+                    </div>
+
+                    <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-x-4 w-full">
 
                         <FormField
                             control={control}
@@ -182,9 +183,6 @@ export const CompanyForm = ({ company }: Props) => {
                                 </FormItem>
                             )}
                         />
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-x-4 w-full">
                         <FormField
                             control={control}
                             name="address"
