@@ -26,7 +26,7 @@ export async function AdminNavbar({ title }: NavbarProps) {
         <div className="flex flex-1 items-center justify-end gap-2">
           {
             user.role === 'admin' && (
-              <CreateButton title="Crear equipo" href="/admin/surveys/equipment/new" />
+              <CreateButton title="Crear equipo" href="/admin/equipments/new" />
             )
           }
           <SearchDialog />

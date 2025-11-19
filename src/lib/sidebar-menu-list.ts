@@ -8,7 +8,7 @@ type Submenu = {
 };
 
 type Menu = {
-  href: string;
+  href?: string;
   label: string;
   active?: boolean;
   disabled?: boolean;
@@ -45,21 +45,27 @@ export function getCommonMenuList(pathname: string): Group[] {
       groupLabel: "Gestión general",
       menus: [
         {
-          href: "/admin/companies",
-          label: "Empresas",
-          icon: IoLayersOutline,
-          createHref: "/admin/companies/new"
-        },
-        {
           href: "/admin/payments",
           label: "Abonos",
           icon: IoTicketOutline,
           createHref: "/admin/payments/new"
         },
         {
-          href: "/admin/servicios",
+          href: "/admin/companies",
+          label: "Empresas",
+          icon: IoLayersOutline,
+          createHref: "/admin/companies/new"
+        },
+        {
+          label: "Presupuestos",
+          icon: IoLayersOutline,
+          createHref: "/admin/budgets/new",
+          disabled: true
+        },
+        {
           label: "Servicios",
           icon: IoConstructOutline,
+          createHref: "/admin/services/new",
           disabled: true
         },
         {
@@ -96,7 +102,7 @@ export function getCommonMenuList(pathname: string): Group[] {
           href: "/admin/equipments",
           label: "Equipos",
           icon: IoDiceOutline,
-          createHref: "/admin/surveys/equipment/new"
+          createHref: "/admin/equipments/new"
         },
         {
           href: "/admin/categories",

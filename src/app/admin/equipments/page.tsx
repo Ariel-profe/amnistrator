@@ -34,7 +34,7 @@ export default async function EquipmentsAdminPage() {
             />
 
             <div className='mt-5 flex justify-end'>
-                <CreateButton title="Crear equipo" href="/admin/surveys/equipment/new" />
+                <CreateButton title="Crear equipo" href="/admin/equipments/new" />
             </div>
 
             {

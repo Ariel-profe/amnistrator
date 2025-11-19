@@ -9,7 +9,7 @@ import { HandleAddUpdatePaymentItem, HandleDeleteButton, HandleViewPayment } fro
 
 interface Props {
     payments: (
-        Payment 
+        Payment
         & { month: { name: string } }
         & { paymentItems: PaymentItem[] }
     )[];
@@ -46,26 +46,18 @@ export const PaymentsTable = ({ payments, userRole }: Props) => {
             }
         },
         {
-            field: 'edit',
-            headerName: "Editar",
+            field: 'actions',
+            headerName: "Acciones",
             cellClassName: 'text-gray-100',
             headerClassName: 'text-gray-900',
             renderCell: ({ row }: GridRenderCellParams) => {
                 return (
-                    <Link href={`/admin/surveys/equipment/${row.slug}`} className="hover:underline text-blue-600 hover:text-blue-800 flex items-center h-full justify-center">
-                        <IoPencilSharp size={20} />
-                    </Link>
-                )
-            }
-        },
-        {
-            field: 'delete',
-            headerName: 'Eliminar',
-            cellClassName: 'text-gray-100',
-            headerClassName: 'text-gray-900',
-            renderCell: ({ row }: GridRenderCellParams) => {
-                return (
-                    <HandleDeleteButton id={row.id} model="payment" />
+                    <div className='flex items-center justify-between'>
+                        <Link href={`/admin/payments/${row.id}`} className="hover:underline text-blue-600 hover:text-blue-800 flex items-center h-full justify-center">
+                            <IoPencilSharp size={15} />
+                        </Link>
+                        <HandleDeleteButton id={row.id} model="payment" />
+                    </div>
                 )
             }
         },

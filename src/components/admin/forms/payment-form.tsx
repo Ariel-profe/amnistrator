@@ -80,12 +80,12 @@ export const PaymentForm = ({ payment, months }: Props) => {
                     </LoadingButton>
                 </div>
 
-                <div className="grid md:grid-cols-12 gap-x-4 w-full mt-5">
+                <div className="grid gap-4 w-full max-w-2xl mt-5">
                     <FormField
                         control={form.control}
                         name="monthId"
                         render={({ field }) => (
-                            <FormItem className="col-span-2">
+                            <FormItem>
                                 <FormLabel>Mes</FormLabel>
                                 {
                                     months.length === 0
@@ -123,7 +123,7 @@ export const PaymentForm = ({ payment, months }: Props) => {
                         control={form.control}
                         name="totalHours"
                         render={({ field }) => (
-                            <FormItem className="col-span-2">
+                            <FormItem>
                                 <FormLabel>Total de Horas</FormLabel>
                                 <FormControl>
                                     <Input
@@ -141,7 +141,7 @@ export const PaymentForm = ({ payment, months }: Props) => {
                         control={form.control}
                         name="summary"
                         render={({ field }) => (
-                            <FormItem className="w-full col-span-8">
+                            <FormItem>
                                 <FormLabel>Resumen</FormLabel>
                                 <FormControl>
                                     <Textarea {...field} placeholder="Colocar un resumen del mes" />

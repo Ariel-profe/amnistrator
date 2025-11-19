@@ -3,11 +3,7 @@ export const revalidate = 0; // Disable revalidation for this page
 import { PageTitle, ContentLayout, OfficesTable, CreateButton } from '@/components';
 import { getOffices } from '@/actions/admin/get-offices';
 
-interface Props {
-    searchParams: Promise<{ page?: string }>
-};
-
-export default async function OfficesAdminPage({ searchParams }: Props) {
+export default async function OfficesAdminPage() {
 
     const offices = await getOffices();
 

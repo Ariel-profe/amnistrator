@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { ContentLayout, EmailForm, LogoutEverywhereButton, PageTitle, PasswordForm, ProfileDetailsForm } from "@/components";
+import { EmailForm, LogoutEverywhereButton, PageTitle, PasswordForm, ProfileDetailsForm } from "@/components";
 import { getServerSession } from "@/lib/get-server-session";
-import { forbidden, unauthorized } from "next/navigation";
+import { forbidden } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Perfil",

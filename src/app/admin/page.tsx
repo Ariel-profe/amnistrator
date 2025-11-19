@@ -1,9 +1,9 @@
 
 import type { Metadata } from "next";
 import { unauthorized } from "next/navigation";
-import { ContentLayout, EmailVerificationAlert, ProfileInformation, DashboardTooltip, SectionCards, EquipmentChart } from "@/components";
+import { ContentLayout, EmailVerificationAlert, ProfileInformation, DashboardTooltip, SectionCards, EquipmentChart, StatusPieChart } from "@/components";
 import { getServerSession } from "@/lib/get-server-session";
-import { getTotalPayments, getTotalEquipmentsByOfficeName } from "@/actions";
+import { getTotalPayments, getTotalEquipmentsByOfficeName, getEquipmentsByDate, getEquipmentsByStatus } from "@/actions";
 
 export const metadata: Metadata = {
   title: "Panel administrativo",
@@ -12,12 +12,22 @@ export const metadata: Metadata = {
 
 export default async function AdminDashboardPage() {
 
-  const [session, totalPayments, primitivoEquipments, buciEquipments, moldesEquipments] = await Promise.all([
+  const [
+    session, 
+    totalPayments, 
+    primitivoEquipments, 
+    buciEquipments, 
+    moldesEquipments,
+    equipmentsByDate,
+    equipmentsByStatus  
+  ] = await Promise.all([
     getServerSession(),
     getTotalPayments(),
     getTotalEquipmentsByOfficeName('primitivo'),
     getTotalEquipmentsByOfficeName('buci'),
     getTotalEquipmentsByOfficeName('moldes'),
+    getEquipmentsByDate(),
+    getEquipmentsByStatus()
   ]);
   
   const user = session?.user;
@@ -39,10 +49,11 @@ export default async function AdminDashboardPage() {
         />
 
         <div className="grid sm:grid-cols-2 gap-4">
-          <EquipmentChart />
-          <EquipmentChart />
-          <EquipmentChart />
-          <EquipmentChart />
+          <EquipmentChart 
+            title="Total de equipos" 
+            equipments={equipmentsByDate.map(e => ({ ...e, createdAt: e.createdAt.toISOString() }))}
+          />
+          <StatusPieChart equipmentsByStatus={equipmentsByStatus} />
         </div>
       </div>
     </ContentLayout>

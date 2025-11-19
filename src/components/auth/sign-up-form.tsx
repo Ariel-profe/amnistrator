@@ -12,7 +12,7 @@ import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
 
 const signUpSchema = z.object({
-    name: z.string().min(1, { message: "El nombre es obligatorio" }),
+    name: z.string().min(1, { message: "El nombre es obligatorio" }).min(2, { message: "El nombre debe tener al menos 2 caracteres" }),
     email: z.email({ message: "Ingresa un email válido" }),
     password: passwordSchema,
     passwordConfirmation: z
@@ -25,8 +25,6 @@ const signUpSchema = z.object({
   });
 
 type SignUpValues = z.infer<typeof signUpSchema>;
-
-const strengthLabels = ["weak", "medium", "medium", "strong"];
 
 export function SignUpForm() {
   

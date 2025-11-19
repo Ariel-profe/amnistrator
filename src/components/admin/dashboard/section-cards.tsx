@@ -32,7 +32,7 @@ export function SectionCards({totalPayments, primitivoEquipments, buciEquipments
                     <CardAction>
                         <Badge variant="outline">
                             <TrendingDown />
-                            -20%
+                            +20%
                         </Badge>
                     </CardAction>
                 </CardHeader>

@@ -23,7 +23,7 @@ export default async function InitialPage() {
                     />
                 </div>
                 <h1 className="text-3xl font-semibold sm:text-4xl">
-                    <span className="text-primary">AMN</span>istrator
+                    <span className="text-amn">AMN</span>istrator
                 </h1>
                 <p className="text-muted-foreground mt-3 text-base text-balance sm:text-lg">
                     Software de administración de datos para organizar y optimizar tu empresa, creado por{" "}
@@ -31,7 +31,7 @@ export default async function InitialPage() {
                         href="https://www.youtube.com/c/codinginflow?sub_confirmation=1"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-primary hover:underline"
+                        className="text-amn hover:underline"
                     >
                         AMN Consultora Informática
                     </Link>

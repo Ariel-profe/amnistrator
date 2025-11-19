@@ -3,7 +3,7 @@
 export function HeroSection() {
   return (
     <section
-      className="relative w-full overflow-hidden py-32 font-light text-white antialiased md:py-20 min-h-"
+      className="relative w-full overflow-hidden py-32 font-light text-white antialiased md:py-20 min-h-[calc(100vh-22.5rem)] flex items-center"
       style={{
         background: 'linear-gradient(135deg, #060713 0%, #0f0d27 100%)'
       }}
@@ -36,7 +36,7 @@ export function HeroSection() {
           <img
             src="/amn-globe.svg"
             alt="amn globe"
-            className="object-contain h-full mx-auto fadeIn"
+            className="opacity-70 object-contain h-full mx-auto fadeIn"
             />
         </div>
         </div>

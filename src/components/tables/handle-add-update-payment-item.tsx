@@ -63,9 +63,6 @@ export const HandleAddUpdatePaymentItem = ({ paymentId, paymentItem }: Props) =>
 
         toast.success(message);
         form.reset();
-        // Close the dialog
-        const closeButton = document.querySelector('[data-dialog-close]') as HTMLButtonElement;
-        closeButton?.click();
     };    
 
     return (
@@ -217,12 +214,14 @@ export const HandleAddUpdatePaymentItem = ({ paymentId, paymentItem }: Props) =>
                                     Cancelar
                                 </Button>
                             </DialogClose>
-                            <LoadingButton
-                                type="submit"
-                                loading={form.formState.isSubmitting}
-                            >
-                                Guardar
-                            </LoadingButton>
+                            <DialogTrigger asChild>
+                                <LoadingButton
+                                    type="submit"
+                                    loading={form.formState.isSubmitting}
+                                    >
+                                    Guardar
+                                </LoadingButton>
+                            </DialogTrigger>
                         </DialogFooter>
                     </form>
                 </Form>

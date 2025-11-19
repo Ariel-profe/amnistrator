@@ -52,7 +52,6 @@ export * from './admin/common/create-button';
 export * from './admin/dashboard/admin-navbar';
 export * from './admin/dashboard/admin-panel-layout';
 export * from './admin/dashboard/admin-sidebar';
-export * from './admin/dashboard/equipment-chart';
 export * from './admin/dashboard/collapse-menu-button';
 export * from './admin/dashboard/content-layout';
 export * from './admin/dashboard/email-verification-alert';
@@ -62,6 +61,10 @@ export * from './admin/dashboard/resend-verification-button';
 export * from './admin/dashboard/section-cards';
 export * from './admin/dashboard/sheet-menu';
 export * from './admin/dashboard/sidebar-toggle';
+
+// Charts Components
+export * from './admin/charts/equipment-chart';
+export * from './admin/charts/status-pie-chart';
 
 // Forms Components
 export * from './admin/forms/category-form';
@@ -82,7 +85,7 @@ export * from './tables/companies-table';
 export * from './tables/equipment-table';
 export * from './tables/offices-table';
 export * from './tables/payments-table';
-export * from './admin/users/users-table';
+export * from './tables/users-table';
 export * from './tables/handle-add-reviews';
 export * from './tables/handle-add-update-payment-item';
 export * from './tables/handle-view-equipment';

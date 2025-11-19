@@ -13,7 +13,8 @@ interface Props {
         Equipment
         & { office: { name: string } }
         & { services: { id: number; description: string; date: string }[] }
-        & { reviews: { id: number; description: string; date: string, boxNumber: number, priority: string; user: { name: string } }[] }
+        & { reviews: { id: number; description: string; date: string, boxNumber: number, priority: string;  }[] }
+        & { category: { name: string } }
     )[];
     userRole: string;
 };
@@ -72,26 +73,18 @@ export const EquipmentTable = ({ equipment, userRole }: Props) => {
             }
         },
         {
-            field: 'edit',
-            headerName: "Editar",
+            field: 'actions',
+            headerName: "Acciones",
             cellClassName: 'text-gray-100',
             headerClassName: 'text-gray-900',
             renderCell: ({ row }: GridRenderCellParams) => {
                 return (
-                    <Link href={`/admin/surveys/equipment/${row.slug}`} className="hover:underline text-blue-600 hover:text-blue-800 flex items-center h-full justify-center">
-                        <IoPencilSharp size={20} />
-                    </Link>
-                )
-            }
-        },
-        {
-            field: 'delete',
-            headerName: 'Eliminar',
-            cellClassName: 'text-gray-100',
-            headerClassName: 'text-gray-900',
-            renderCell: ({ row }: GridRenderCellParams) => {
-                return (
-                    <HandleDeleteButton id={row.id} model="equipment" />
+                    <div className='flex items-center justify-between'>
+                        <Link href={`/admin/equipments/${row.slug}`} className="hover:underline text-blue-600 hover:text-blue-800 flex items-center h-full justify-center">
+                            <IoPencilSharp size={15} />
+                        </Link>
+                        <HandleDeleteButton id={row.id} model="equipment" />
+                    </div>
                 )
             }
         },

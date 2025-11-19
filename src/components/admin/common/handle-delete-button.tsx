@@ -1,14 +1,19 @@
 "use client"
 
+import { useState } from "react";
 import { toast } from "sonner";
 import { IoTrashOutline, IoWarningOutline } from "react-icons/io5";
 
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, Button } from "@/components";
-import { deleteOfficeById, deleteEquipmentById, deleteUserById, deletePaymentItemById, deletePayment } from "@/actions";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, Button, LoadingButton } from "@/components";
+import { deleteOfficeById, deleteEquipmentById, deleteUserById, deletePaymentItemById, deletePayment, deleteCompanyById, deleteCategoryById } from "@/actions";
 
 export const HandleDeleteButton = ({ id, model }: { id: string | number, model: string }) => {
+
+    const [loading, setLoading] = useState(false);
+
     const handleDelete = async () => {
         try {
+            setLoading(true);
             if (model === "office") {
                 const { message, ok } = await deleteOfficeById(id as string);
                 if (ok) {
@@ -44,8 +49,25 @@ export const HandleDeleteButton = ({ id, model }: { id: string | number, model: 
                 } else {
                     toast.error(message);
                 }
+            } else if(model === "company") {
+                const { message, ok } = await deleteCompanyById(id as string);
+                if (ok) {
+                    toast.success(message);
+                } else {
+                    toast.error(message);
+                }
+            } else if(model === "category") {
+                const { message, ok } = await deleteCategoryById(id as string);
+                if (ok) {
+                    toast.success(message);
+                } else {
+                    toast.error(message);
+                }
             }
+            setLoading(false);
         } catch (error) {
+            toast.error("Error al eliminar el elemento");
+            setLoading(false);
             console.error(error);
             return;
         }
@@ -81,7 +103,12 @@ export const HandleDeleteButton = ({ id, model }: { id: string | number, model: 
                         <DialogClose asChild>
                             <Button variant="outline">Cancelar</Button>
                         </DialogClose>
-                        <Button type="submit" variant="destructive" onClick={handleDelete}>Eliminar</Button>
+                        <LoadingButton 
+                            loading={loading} 
+                            type="submit" 
+                            variant="destructive"
+                            onClick={handleDelete}
+                        >Eliminar</LoadingButton>
                     </DialogFooter>
                 </DialogContent>
             </form>

@@ -219,9 +219,6 @@ export const EquipmentForm = ({ equipment, offices, categories, services, review
     watch('services');
     watch('reviews');
 
-    console.log({ officeSelected });
-
-
     return (
         <Form {...form}>
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -445,7 +442,7 @@ export const EquipmentForm = ({ equipment, offices, categories, services, review
                                                                                 {opt}
                                                                             </SelectItem>
                                                                         ))
-                                                                    : (<SelectItem key="sinUbicacion" value="sinUbicacion">
+                                                                    : (<SelectItem key="sin ubicacion" value="sinUbicacion">
                                                                         Sin ubicación
                                                                     </SelectItem>)
                                                             }

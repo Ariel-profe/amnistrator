@@ -15,7 +15,7 @@ export default async function MainLayout({ children }: { children: ReactNode }) 
   return (
     <main>
       <Navbar user={user} />
-      <div>
+      <div className="min-h-[calc(100vh-22.5rem)]">
         {children}
       </div>
       <Footer />

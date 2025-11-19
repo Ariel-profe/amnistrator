@@ -82,6 +82,7 @@ export const Navbar = ({ user }: Props) => {
 
                 {/* Desktop Navigation (Right) */}
                 <nav className="hidden md:flex items-center justify-end gap-6 text-sm flex-1">
+                    <Link href="/acerca-de" className="font-medium text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors">Acerca de</Link>
                     {
                         user ? (
                             <>

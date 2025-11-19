@@ -57,14 +57,13 @@ export function Menu({ isOpen }: MenuProps) {
                 <p className="pb-2"></p>
               )}
               {menus.map(
-                ({ href, label, icon: Icon, active, submenus, createHref, disabled }, index) =>
+                ({ href = "", label, icon: Icon, active, submenus, createHref, disabled }, index) =>
                   !submenus || submenus.length === 0 ? (
                     <div className="w-full" key={index}>
                       <TooltipProvider disableHoverableContent>
                         <Tooltip delayDuration={100}>
                           <TooltipTrigger asChild>
                             <div className="w-full flex justify-center items-center relative">
-
                               <Button
                                 variant={
                                   (active === undefined &&

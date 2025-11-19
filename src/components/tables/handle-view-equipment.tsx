@@ -21,12 +21,13 @@ interface Props {
             date: string;
             boxNumber: number; 
             priority: string; 
-            user: { name: string } 
-        }[] }        
+          
+        }[] }
+    & { category: { name: string } }        
     ) | null;
 };
 
-export const HandleViewEquipment = ({ equipment }: Props) => {              
+export const HandleViewEquipment = ({ equipment }: Props) => {        
     return (
         <Dialog>
             <form>
@@ -43,10 +44,13 @@ export const HandleViewEquipment = ({ equipment }: Props) => {
                         <div className="grid grid-cols-2">
                             <div>
                                 <DialogDescription className="flex items-center gap-x-1">
-                                    Oficina: <span className="font-normal text-slate-200">{equipment?.office.name}</span>
+                                    Oficina: <span className="font-normal text-slate-200">{equipment?.office?.name}</span>
                                 </DialogDescription>
                                 <DialogDescription className="flex items-center gap-x-1">
-                                    Ubicación: <span className="font-normal text-slate-200">{equipment?.location || ""}</span>
+                                    Ubicación: <span className="font-normal text-slate-200">{equipment?.location}</span>
+                                </DialogDescription>
+                                <DialogDescription className="flex items-center gap-x-1">
+                                    Categoría: <span className="font-normal text-slate-200">{equipment?.category?.name}</span>
                                 </DialogDescription>
                                 <DialogDescription className="flex items-center gap-x-1">
                                     Estado: <span className={`font-normal ${STATUS_COLORS[equipment?.status || ""]}`}>{equipment?.status || ""}</span>
@@ -85,7 +89,7 @@ export const HandleViewEquipment = ({ equipment }: Props) => {
                                 <ul className="list-disc list-inside space-y-1 max-h-60 overflow-y-auto pr-2">
                                     {equipment.services.map((service) => (
                                         <li key={service.id} className="text-sm text-slate-200">
-                                            <span className="text-primary">(Fecha: {format(new Date(service.date), 'dd/MM/yyyy')})</span>
+                                            <span className="text-slate-400">(Fecha: {format(new Date(service.date), 'dd/MM/yyyy')})</span>
                                             {" "}-
                                             <span> {service.description} </span>
                                         </li>

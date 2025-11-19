@@ -22,13 +22,15 @@ export default async function OfficeAdminPage({ params }: Props) {
     // Transform the equipment data to match EquipmentTable expected type
     const equipment = equipmentData.map(item => ({
         ...item,
+        office: { name: office },
+        services: item.services || [],
+        category: item.category || { name: 'Sin categoría' },
         reviews: item.reviews.map(review => ({
             id: review.id,
             description: review.description,
             date: review.date,
             boxNumber: review.boxNumber ?? 0, // Handle null values
             priority: review.priority as "alta" | "media" | "baja",
-            user: review.user || { name: 'Unknown' }
         }))
     }));
 
@@ -40,7 +42,7 @@ export default async function OfficeAdminPage({ params }: Props) {
             />
 
             <div className='mt-5 flex justify-end'>
-                <CreateButton title="Crear equipo" href="/admin/surveys/equipment/new" />
+                <CreateButton title="Crear equipo" href="/admin/equipments/new" />
             </div>
 
             {

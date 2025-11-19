@@ -7,18 +7,12 @@ export const getEquipmentBySlug = async (slug: string) => {
     try {
         const equipment = await prisma.equipment.findFirst({
             include: {
-                // Relations
-                office: {
-                    select: {
-                        name: true
-                    }
-                },
-                services: true,
-                reviews: {
-                    select: {
-                        description: true,
-                    }
-                }
+                category: true,
+                office: true,
+                company: true,
+                user: true,
+                reviews: true,
+                services: true
             },
             where: {
                 slug: slug

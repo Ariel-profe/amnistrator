@@ -34,7 +34,7 @@ export const HandleViewPayment = ({ payment }: Props) => {
                                         <p>No hay servicios agregados a este abono</p>
                                     </div>
                                 ) : (
-                                    <table className="min-w-full mt-4">
+                                    <table className="min-w-4xl mx-auto">
                                         <thead className="bg-slate-100 dark:bg-slate-900 border-b ">
                                             <tr className="text-sm font-medium text-slate-700 dark:text-slate-300">
                                                 <th
@@ -82,7 +82,7 @@ export const HandleViewPayment = ({ payment }: Props) => {
                                             {payment?.paymentItems.map((service) => (
                                                 <tr
                                                     key={service.id}
-                                                    className="bg-slate-100 dark:bg-slate-900 border-b transition duration-300 ease-in-out hover:bg-gray-100 text-sm text-slate-500 dark:text-gray-400 font-bold"
+                                                    className="bg-slate-100 dark:bg-slate-800 border-b transition duration-300 ease-in-out hover:bg-gray-100 text-sm text-slate-500 dark:text-gray-200 font-bold"
                                                 >
                                                     <td className="px-6 py-4 whitespace-nowrap">
                                                         {format(new Date(service.date), 'dd/MM/yyyy')}

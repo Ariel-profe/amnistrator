@@ -35,7 +35,7 @@ export default async function EquipmentAdminPage({ params }: Props) {
                 description="Administra la información del equipo."
             />
             <EquipmentForm
-                equipment={equipment as any ?? {}}
+                equipment={equipment ?? {}}
                 offices={offices}
                 categories={categories}
                 services={services}

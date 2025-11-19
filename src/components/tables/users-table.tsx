@@ -4,7 +4,7 @@ import { changeUserEmailVerified, changeUserRole } from '@/actions';
 import { User } from '@/lib/auth';
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { toast } from 'sonner';
-import { HandleDeleteButton } from '../common/handle-delete-button';
+import { HandleDeleteButton } from '@/components';
 
 interface Props {
     users: User[];
